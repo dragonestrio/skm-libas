@@ -15,7 +15,7 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->string('questions_categorie_id');
+            $table->integer('questions_categorie_id');
             $table->text('name');
             $table->softDeletes();
             $table->timestamps();

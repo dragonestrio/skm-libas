@@ -36,6 +36,18 @@ class AuthServiceProvider extends ServiceProvider
             $result = auth()->user()->level === 'admin';
             return $result;
         });
+        Gate::define('superadmin_admin', function () {
+            $try_a = auth()->user()->level === 'superadmin';
+            $try_b = auth()->user()->level === 'admin';
+
+            if ($try_a == true || $try_b == true) {
+                $result = true;
+            } else {
+                $result = false;
+            }
+
+            return $result;
+        });
         Gate::define('user', function () {
             $result = auth()->user()->level === 'user';
             return $result;

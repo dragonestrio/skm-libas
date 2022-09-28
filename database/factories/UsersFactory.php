@@ -27,7 +27,6 @@ class UsersFactory extends Factory
             'date_born' => $this->faker->date(),
             'remember_token' => '',
 
-
             // 'id' => $this->faker->md5(),
             // 'email' => $this->faker->unique()->safeEmail(),
             // 'password' => bcrypt('password'),

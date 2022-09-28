@@ -17,12 +17,16 @@ class QuestionController extends Controller
      */
     public function index(Request $request)
     {
-        $question = Question::latest();
+        $question = Question::join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
+            ->latest('questions.created_at')
+            ->select('questions.id', 'questions.name as question_name', 'questions_categories.name as question_category_name');
 
         if ($request->input('search')) {
             $question
-                ->where('name', 'like', '%' . $request->input('search') . '%');
+                ->where('questions.name', 'like', '%' . $request->input('search') . '%')
+                ->orwhere('questions_categories.name', 'like', '%' . $request->input('search') . '%');
         }
+
 
         $data = [
             'title'                     => 'Pertanyaan',
@@ -51,7 +55,7 @@ class QuestionController extends Controller
             'description'       => '',
             'state'             => 'create',
             'position'          => 'pertanyaan',
-            'question_category' => Questions_category::latest()->get(),
+            'questions_category' => Questions_category::latest()->get(),
         ];
 
         return view('question.form', $data);
@@ -111,9 +115,8 @@ class QuestionController extends Controller
             'description'               => '',
             'state'                     => 'update',
             'position'                  => 'pertanyaan',
+            'questions_category'         => Questions_category::latest()->get(),
             'question_count'            => $check_question,
-            'question_category'         => Questions_category::latest()->get(),
-            'question_category_recent'  => Questions_category::where('id', $questiona->questions_categorie_id)->first(),
             'question'                  => $questiona,
         ];
 

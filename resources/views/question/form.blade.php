@@ -97,16 +97,21 @@
                             <select name="questions_categorie_id" class="form-control @error('questions_categorie_id')
                                 is-invalid
                             @enderror">
-                            @if (old('questions_categorie_id') != null)
-                            <?php $question_category_recent_name = $question_category->where('id', old('questions_categorie_id'))->first()->name; ?>
-                            {!! '<option value="'.old('questions_categorie_id').'">'.ucwords($question_category_recent_name).'</option>' !!}
-                            @else
-                            {!! (isset($question_category_recent)) ? '<option value="'.$question_category_recent->id.'">'. ucwords($question_category_recent->name).'</option>' : '' !!}   
-                            @endif
-                            @foreach ($question_category as $item)
+                              @if (old('questions_categorie_id') != null)
+                                <?php $question_category_recent_name = $questions_category->where('id', old('questions_categorie_id'))->first()->name; ?>
+                                <option value="{{ old('questions_categorie_id') }}">{{ ucwords($question_category_recent_name) }}</option>
+                              @else
+                                @if (isset($question))
+                                <?php $question_category_recent_name = $questions_category->where('id', $question->questions_categorie_id)->first()->name; ?>
+                                <option value="{{ $question->questions_categorie_id }}">{{ ucwords($question_category_recent_name) }}</option>   
+                                @endif
+                              @endif
+
+                            @foreach ($questions_category as $item)
                             <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
                             @endforeach
                             </select>
+                            
                             @error('questions_categorie_id')
                             <p class="p-0 m-0 text-danger text-input-failed">{{ $message }}</p>
                             @enderror

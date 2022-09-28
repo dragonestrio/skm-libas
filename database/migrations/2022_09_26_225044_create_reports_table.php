@@ -16,7 +16,7 @@ class CreateReportsTable extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('user_id');
-            $table->string('questions_categorie_id');
+            $table->integer('question_id');
             $table->integer('result');
             $table->softDeletes();
             $table->timestamps();

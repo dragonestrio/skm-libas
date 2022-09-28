@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginHistoryController;
 use App\Http\Controllers\MhsController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionsCategoryController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UsersController;
 use App\Models\Users;
@@ -61,6 +62,10 @@ Route::resource('questions_categories', QuestionsCategoryController::class)->exc
 
 // pertanyaan
 Route::resource('questions', QuestionController::class)->except('show')->middleware('superadmin');
+// 
+
+// laporan kuesinoer
+Route::resource('reports', ReportController::class)->except('show')->middleware('superadmin');
 // 
 
 // login history

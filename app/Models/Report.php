@@ -25,4 +25,14 @@ class Report extends Model
     protected $casts = [
         // 'email_verified_at' => 'datetime',
     ];
+
+    public function users()
+    {
+        return $this->belongsTo(Users::class, 'user_id', 'id');
+    }
+
+    public function question_category()
+    {
+        return $this->belongsTo(Questions_category::class, 'questions_categorie_id', 'id');
+    }
 }

@@ -103,7 +103,8 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th class="text-capitalize text-xxs text-start">nama</th>
+                        <th class="text-capitalize text-xxs text-start">nama pertanyaan</th>
+                        <th class="text-capitalize text-xxs text-start">kategori</th>
                         <th class="text-capitalize text-xxs text-center">aksi</th>
                       </tr>
                     </thead>
@@ -111,7 +112,8 @@
 
                       @foreach ($question as $item)
                       <tr class="fw-bolder">
-                        <td class="text-capitalize px-4">{{ $item->name }}</td>
+                        <td class="text-capitalize px-4">{{ $item->question_name }}</td>
+                        <td class="text-capitalize px-4">{{ $item->question_category_name }}</td>
                         <td>
                           <div class="d-flex justify-content-center">
                             {{-- <a href="{{ url('questions/'.$item->id) }}" class="btn shadow-none text-decoration-none fw-bold px-3 py-0">
