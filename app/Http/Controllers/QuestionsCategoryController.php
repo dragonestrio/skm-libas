@@ -16,7 +16,7 @@ class QuestionsCategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $question_category = Questions_category::latest();
+        $question_category = Questions_category::orderBy('name');
 
         if ($request->input('search')) {
             $question_category

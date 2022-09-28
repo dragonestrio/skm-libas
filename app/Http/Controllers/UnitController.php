@@ -16,7 +16,7 @@ class UnitController extends Controller
      */
     public function index(Request $request)
     {
-        $unit = Unit::latest();
+        $unit = Unit::orderBy('name');
 
         if ($request->input('search')) {
             $unit
