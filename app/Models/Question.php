@@ -25,4 +25,9 @@ class Question extends Model
     protected $casts = [
         // 'email_verified_at' => 'datetime',
     ];
+
+    public function category()
+    {
+        $this->belongsTo(Questions_category::class, "questions_categorie_id", "id");
+    }
 }
