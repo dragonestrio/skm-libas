@@ -64,7 +64,7 @@ Route::resource('questions_categories', QuestionsCategoryController::class)->exc
 Route::resource('questions', QuestionController::class)->except('show')->middleware('superadmin');
 // 
 
-// laporan kuesinoer
+// laporan kuesioner
 Route::resource('reports', ReportController::class)->except('show')->middleware('superadmin');
 // 
 

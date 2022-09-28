@@ -27,8 +27,14 @@ class Question extends Model
         // 'email_verified_at' => 'datetime',
     ];
 
+<<<<<<< HEAD
     public function question_category()
     {
         return $this->belongsTo(Questions_category::class, 'questions_categorie_id', 'id');
+=======
+    public function category()
+    {
+        return $this->belongsTo(Questions_category::class, "questions_categorie_id", "id");
+>>>>>>> e6c86d4ae319f8a1a8779e8069d1f46dce83cea2
     }
 }

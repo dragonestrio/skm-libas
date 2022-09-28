@@ -174,7 +174,7 @@ class UnitController extends Controller
 
             default:
                 $validation = validator($request->all(), [
-                    'name'                  => ['required', 'string', 'min:5', 'max:50', 'unique:units,name'],
+                    'name'                  => ['required', 'string', 'max:50', 'unique:units,name'],
                 ]);
                 break;
         }
