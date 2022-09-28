@@ -61,11 +61,11 @@ class QuestionsCategoryController extends Controller
      * @param  \App\Http\Requests\StoreQuestions_categoryRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreQuestions_categoryRequest $request)
+    public function store(Request $request)
     {
         $validate = $this->validation(false, $request);
         if ($validate->fails()) {
-            return redirect('question_categories/create')->withErrors($validate)->withInput();
+            return redirect('questions_categories/create')->withErrors($validate)->withInput();
         }
 
         $data = [
@@ -74,9 +74,9 @@ class QuestionsCategoryController extends Controller
 
         $result = Questions_category::create($data);
         if ($result == true) {
-            return redirect('question_categories')->with('notif-y', 'sukses');
+            return redirect('questions_categories')->with('notif-y', 'sukses');
         } else {
-            return redirect('question_categories/create')->with('notif-x', 'error')->withInput();
+            return redirect('questions_categories/create')->with('notif-x', 'error')->withInput();
         };
     }
 
@@ -125,7 +125,7 @@ class QuestionsCategoryController extends Controller
     {
         $validate = $this->validation('update', $request);
         if ($validate->fails()) {
-            return redirect('question_categories/' . $questions_category->id . '/edit')->withErrors($validate)->withInput();
+            return redirect('questions_categories/' . $questions_category->id . '/edit')->withErrors($validate)->withInput();
         }
 
         $data = [
@@ -134,9 +134,9 @@ class QuestionsCategoryController extends Controller
 
         $result = Questions_category::where('id', $questions_category->id)->update($data);
         if ($result == true) {
-            return redirect('question_categories')->with('notif-y', 'sukses');
+            return redirect('questions_categories')->with('notif-y', 'sukses');
         } else {
-            return redirect('question_categories/' . $questions_category->id . '/edit')->with('notif-x', 'error')->withInput();
+            return redirect('questions_categories/' . $questions_category->id . '/edit')->with('notif-x', 'error')->withInput();
         };
     }
 
@@ -151,9 +151,9 @@ class QuestionsCategoryController extends Controller
         $result = $questions_category::destroy($questions_category->id);
 
         if ($result == true) {
-            return redirect('question_categories')->with('notif-y', 'sukses');
+            return redirect('questions_categories')->with('notif-y', 'sukses');
         } else {
-            return redirect('question_categories')->with('notif-x', 'error');
+            return redirect('questions_categories')->with('notif-x', 'error');
         }
     }
 

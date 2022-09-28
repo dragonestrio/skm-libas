@@ -87,7 +87,7 @@
                 </form>
               </div>
               <div class="col-12 col-lg-12 pb-3 px-5">
-                <a href="{{ url('questions_categories/create') }}" class="form-control btn btn-primary bg-gradient-primary mb-0">
+                <a href="{{ url('questions/create') }}" class="form-control btn btn-primary bg-gradient-primary mb-0">
                   <div class="input-group justify-content-center">
                     <div class="input-group-text bg-transparent border-0 pe-0 text-white">
                       <svg xmlns="http://www.w3.org/2000/svg" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
@@ -109,12 +109,12 @@
                     </thead>
                     <tbody>
 
-                      @foreach ($question_category as $item)
+                      @foreach ($question as $item)
                       <tr class="fw-bolder">
                         <td class="text-capitalize px-4">{{ $item->name }}</td>
                         <td>
                           <div class="d-flex justify-content-center">
-                            {{-- <a href="{{ url('questions_categories/'.$item->id) }}" class="btn shadow-none text-decoration-none fw-bold px-3 py-0">
+                            {{-- <a href="{{ url('questions/'.$item->id) }}" class="btn shadow-none text-decoration-none fw-bold px-3 py-0">
                               <div class="input-group">
                                 <div class="input-group-text bg-transparent border-0 pe-0 text-primary">
                                   <svg xmlns="http://www.w3.org/2000/svg" height="16" fill="currentColor" class="bi bi-info" viewBox="0 0 16 16">
@@ -126,7 +126,7 @@
                                 </div>
                               </div>
                             </a> --}}
-                            <a href="{{ url('questions_categories/'.$item->id.'/edit') }}" class="btn shadow-none text-decoration-none fw-bold px-3 py-0">
+                            <a href="{{ url('questions/'.$item->id.'/edit') }}" class="btn shadow-none text-decoration-none fw-bold px-3 py-0">
                               <div class="input-group">
                                 <div class="input-group-text bg-transparent border-0 pe-0 text-dark">
                                   <svg xmlns="http://www.w3.org/2000/svg" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
@@ -139,7 +139,7 @@
                               </div>
                             </a>
                             <button form="delete-{{ $item->id }}" onclick="return confirm('Apakah benar Anda ingin menghapus Admin {{ $item->name }} ?')" class="btn shadow-none fw-bold px-3 py-0">
-                              <form action="{{ url('questions_categories/'.$item->id) }}" method="post" enctype="multipart/form-data" class="d-inline" id="delete-{{ $item->id }}">
+                              <form action="{{ url('questions/'.$item->id) }}" method="post" enctype="multipart/form-data" class="d-inline" id="delete-{{ $item->id }}">
                                 @method('delete')
                                 @csrf
                                 <div class="input-group">
@@ -165,7 +165,7 @@
               </div>
             </div>
             <div class="d-flex justify-content-center pb-5">
-                {{ $question_category->links() }}
+                {{ $question->links() }}
             </div>
           </div>
         </div>
