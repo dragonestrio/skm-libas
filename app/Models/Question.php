@@ -28,6 +28,6 @@ class Question extends Model
 
     public function category()
     {
-        $this->belongsTo(Questions_category::class, "questions_categorie_id", "id");
+        return $this->belongsTo(Questions_category::class, "questions_categorie_id", "id");
     }
 }

@@ -15,20 +15,8 @@ class QuestionController extends Controller
         $question = cache('questionCache');
 
         $data = [];
-        if (!$question) {
-            $data = Question::with("category")->orderBy("questions_categorie_id", "ASC")->paginate(1);
-
-
-            if ($request["page"] != null) {
-                if ($request['page'] == 1) {
-                    $data->forget(0);
-                }
-            } else {
-                $data->forget(0);
-            }
-
-
-            $primary = Question::latest()->get()->first();
+        if ($question) {
+            $data = Question::with("category")->orderBy("questions_categorie_id", "ASC")->simplePaginate(1);
 
             Cache::put('questionCache', $data, now()->addMinutes(60));
         } else {
