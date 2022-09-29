@@ -98,12 +98,14 @@
                                 is-invalid
                             @enderror">
                               @if (old('questions_categorie_id') != null)
-                                <?php $question_category_recent_name = $questions_category->where('id', old('questions_categorie_id'))->first()->name; ?>
-                                <option value="{{ old('questions_categorie_id') }}">{{ ucwords($question_category_recent_name) }}</option>
+                                @foreach ($questions_category as $item)
+                                    @if ($item->id == old('questions_categorie_id'))
+                                    <option value="{{ old('questions_categorie_id') }}">{{ ucwords($item->name) }}</option>
+                                    @endif
+                                @endforeach
                               @else
                                 @if (isset($question))
-                                <?php $question_category_recent_name = $questions_category->where('id', $question->questions_categorie_id)->first()->name; ?>
-                                <option value="{{ $question->questions_categorie_id }}">{{ ucwords($question_category_recent_name) }}</option>   
+                                <option value="{{ $question->questions_categorie_id }}">{{ ucwords($question->question_category_name) }}</option>
                                 @endif
                               @endif
 

@@ -14,14 +14,12 @@ class UnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, Api $api)
     {
-        $unit = Unit::orderBy('name');
-
-        if ($request->input('search')) {
-            $unit
-                ->where('name', 'like', '%' . $request->input('search') . '%');
-        }
+        ($request->input('page') == null) ? $request->merge(['page' => 1]) : '';
+        (count($request->input()) > 0)
+            ? $units = $api->sendGet($request->input(), url('api/' . date('d_m_Y_', time()) . 'units'), null)
+            : $units = $api->sendGet(null, url('api/' . date('d_m_Y_', time()) . 'units'), null);
 
         $data = [
             'title'         => 'Unit Fokus',
@@ -30,7 +28,7 @@ class UnitController extends Controller
             'description'   => '',
             'state'         => 'read',
             'position'      => 'unit fokus',
-            'units'         => $unit->simplePaginate(8),
+            'units'         => $units->data,
         ];
 
         return view('units.index', $data);
@@ -41,7 +39,7 @@ class UnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Api $api)
     {
         $data = [
             'title'         => 'Tambah Unit Fokus',
@@ -61,18 +59,14 @@ class UnitController extends Controller
      * @param  \App\Http\Requests\StoreUnitRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Api $api)
     {
-        $validate = $this->validation(false, $request);
-        if ($validate->fails()) {
-            return redirect('units/create')->withErrors($validate)->withInput();
+        $units = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'units'), null);
+        if (isset($units->error) && $units->error == 'Failed to Validate') {
+            return redirect('units/create')->withErrors($units->data)->withInput();
         }
 
-        $data = [
-            'name'          => $request->input('name'),
-        ];
-
-        $result = Unit::create($data);
+        $result = $units->success;
         if ($result == true) {
             return redirect('units')->with('notif-y', 'sukses');
         } else {
@@ -88,7 +82,8 @@ class UnitController extends Controller
      */
     public function show(Unit $unit)
     {
-        // 
+        // EMPTY
+        return abort(404);
     }
 
     /**
@@ -97,9 +92,11 @@ class UnitController extends Controller
      * @param  \App\Models\Unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function edit(Unit $unit)
+    public function edit(Unit $unit, Api $api, Request $request)
     {
-        $check_units = $unit::where('id', $unit->id)->count();
+        $units = $api->sendGet($request->input(), url('api/' . date('d_m_Y_', time()) . 'units'), $unit->id);
+        $check_units = count((array) $units->data);
+
         $data = [
             'title'         => 'Perbarui Unit Fokus',
             'app'           => 'SKM LIBAS',
@@ -108,7 +105,7 @@ class UnitController extends Controller
             'state'         => 'update',
             'position'      => 'unit fokus',
             'units_count'   => $check_units,
-            'units'         => $unit::where('id', $unit->id)->first(),
+            'units'         => $units->data,
         ];
 
         return view('units.form', $data);
@@ -121,18 +118,14 @@ class UnitController extends Controller
      * @param  \App\Models\Unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Unit $unit)
+    public function update(Request $request, Unit $unit, Api $api)
     {
-        $validate = $this->validation('update', $request);
-        if ($validate->fails()) {
-            return redirect('units/' . $unit->id . '/edit')->withErrors($validate)->withInput();
+        $units = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'units'), $unit->id);
+        if (isset($units->error) && $units->error == 'Failed to Validate') {
+            return redirect('units/' . $unit->id . '/edit')->withErrors($units->data)->withInput();
         }
 
-        $data = [
-            'name'          => $request->input('name'),
-        ];
-
-        $result = Unit::where('id', $unit->id)->update($data);
+        $result = $units->success;
         if ($result == true) {
             return redirect('units')->with('notif-y', 'sukses');
         } else {
@@ -146,39 +139,15 @@ class UnitController extends Controller
      * @param  \App\Models\Unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Unit $unit)
+    public function destroy(Unit $unit, Api $api, Request $request)
     {
-        $result = $unit::destroy($unit->id);
+        $questions = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'units'), $unit->id);
 
+        $result = $questions->success;
         if ($result == true) {
             return redirect('units')->with('notif-y', 'sukses');
         } else {
             return redirect('units')->with('notif-x', 'error');
         }
-    }
-
-    public function validation($type = false, $request)
-    {
-        switch ($type) {
-            case 'login':
-                break;
-
-            case 'update':
-                $validation = validator($request->all(), [
-                    'name'                  => ['required', 'string', 'min:5', 'max:50'],
-                ]);
-                break;
-
-            case 'update-img':
-                break;
-
-            default:
-                $validation = validator($request->all(), [
-                    'name'                  => ['required', 'string', 'max:50', 'unique:units,name'],
-                ]);
-                break;
-        }
-
-        return $validation;
     }
 }

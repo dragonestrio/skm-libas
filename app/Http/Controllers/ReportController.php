@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreReportRequest;
 use App\Http\Requests\UpdateReportRequest;
-use App\Models\Question;
-use App\Models\Questions_category;
 use App\Models\Report;
 use App\Models\Users;
 use Illuminate\Http\Request;
@@ -17,26 +15,12 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, Api $api)
     {
-        // $report = Report::with('users', 'question_category');
-        $report = Report::join('users', 'users.id', 'reports.user_id')
-            ->join('questions', 'questions.id', 'reports.question_id')
-            ->latest('reports.created_at')
-            ->select(
-                'reports.*',
-                'users.email as users_email',
-                'users.name as users_name',
-                'questions.name as question_name',
-                'questions.questions_categorie_id as question_category'
-            );
-
-        if ($request->input('search')) {
-            $report
-                ->where('user_email', 'like', '%' . $request->input('search') . '%')
-                ->orwhere('question_name', 'like', '%' . $request->input('search') . '%')
-                ->orwhere('reports.result', 'like', '%' . $request->input('search') . '%');
-        }
+        ($request->input('page') == null) ? $request->merge(['page' => 1]) : '';
+        (count($request->input()) > 0)
+            ? $reports = $api->sendGet($request->input(), url('api/' . date('d_m_Y_', time()) . 'reports'), null)
+            : $reports = $api->sendGet(null, url('api/' . date('d_m_Y_', time()) . 'reports'), null);
 
         $data = [
             'title'                     => 'Laporan Kuesioner',
@@ -45,7 +29,7 @@ class ReportController extends Controller
             'description'               => '',
             'state'                     => 'read',
             'position'                  => 'laporan kuesioner',
-            'report'                    => $report->simplePaginate(8),
+            'report'                    => $reports->data,
         ];
 
         return view('report.index', $data);
@@ -56,7 +40,7 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Api $api)
     {
         $data = [
             'title'             => 'Tambah Laporan Kuesioner',
@@ -66,7 +50,7 @@ class ReportController extends Controller
             'state'             => 'create',
             'position'          => 'laporan kuesioner',
             'users'             => Users::latest()->get(),
-            'question'          => Question::latest()->get(),
+            'question'          => $api->sendGet(null, url('api/' . date('d_m_Y_', time()) . 'questions'), null)->data,
         ];
 
         return view('report.form', $data);
@@ -78,20 +62,14 @@ class ReportController extends Controller
      * @param  \App\Http\Requests\StoreReportRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Api $api)
     {
-        $validate = $this->validation(false, $request);
-        if ($validate->fails()) {
-            return redirect('reports/create')->withErrors($validate)->withInput();
+        $reports = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'reports'), null);
+        if (isset($reports->error) && $reports->error == 'Failed to Validate') {
+            return redirect('reports/create')->withErrors($reports->data)->withInput();
         }
 
-        $data = [
-            'user_id'                   => $request->input('user_id'),
-            'question_id'               => $request->input('question_id'),
-            'result'                    => $request->input('result'),
-        ];
-
-        $result = Report::create($data);
+        $result = $reports->success;
         if ($result == true) {
             return redirect('reports')->with('notif-y', 'sukses');
         } else {
@@ -107,7 +85,8 @@ class ReportController extends Controller
      */
     public function show(Report $report)
     {
-        //
+        // EMPTY
+        return abort(404);
     }
 
     /**
@@ -116,10 +95,10 @@ class ReportController extends Controller
      * @param  \App\Models\Report  $report
      * @return \Illuminate\Http\Response
      */
-    public function edit(Report $report)
+    public function edit(Report $report, Api $api, Request $request)
     {
-        $check_report = $report::where('id', $report->id)->count();
-        $reporta = $report::where('id', $report->id)->first();
+        $reports = $api->sendGet($request->input(), url('api/' . date('d_m_Y_', time()) . 'reports'), $report->id);
+        $check_reports = count((array) $reports->data);
 
         $data = [
             'title'                     => 'Perbarui Laporan Kuesioner',
@@ -129,9 +108,9 @@ class ReportController extends Controller
             'state'                     => 'update',
             'position'                  => 'laporan kuesioner',
             'users'                     => Users::latest()->get(),
-            'question'                  => Question::latest()->get(),
-            'report_count'              => $check_report,
-            'report'                    => $reporta,
+            'question'                  => $api->sendGet(null, url('api/' . date('d_m_Y_', time()) . 'questions'), null)->data,
+            'report_count'              => $check_reports,
+            'report'                    => $reports->data,
         ];
 
         return view('report.form', $data);
@@ -144,20 +123,14 @@ class ReportController extends Controller
      * @param  \App\Models\Report  $report
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Report $report)
+    public function update(Request $request, Report $report, Api $api)
     {
-        $validate = $this->validation('update', $request);
-        if ($validate->fails()) {
-            return redirect('reports/' . $report->id . '/edit')->withErrors($validate)->withInput();
+        $reports = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'reports'), $report->id);
+        if (isset($reports->error) && $reports->error == 'Failed to Validate') {
+            return redirect('reports/' . $report->id . '/edit')->withErrors($reports->data)->withInput();
         }
 
-        $data = [
-            'user_id'                   => $request->input('user_id'),
-            'question_id'               => $request->input('question_id'),
-            'result'                    => $request->input('result'),
-        ];
-
-        $result = Report::where('id', $report->id)->update($data);
+        $result = $reports->success;
         if ($result == true) {
             return redirect('reports')->with('notif-y', 'sukses');
         } else {
@@ -171,43 +144,15 @@ class ReportController extends Controller
      * @param  \App\Models\Report  $report
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Report $report)
+    public function destroy(Report $report, Api $api, Request $request)
     {
-        $result = $report::destroy($report->id);
+        $reports = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'reports'), $report->id);
 
+        $result = $reports->success;
         if ($result == true) {
             return redirect('reports')->with('notif-y', 'sukses');
         } else {
             return redirect('reports')->with('notif-x', 'error');
         }
-    }
-
-    public function validation($type = false, $request)
-    {
-        switch ($type) {
-            case 'login':
-                break;
-
-            case 'update':
-                $validation = validator($request->all(), [
-                    'user_id'                   => ['required', 'string', 'exists:users,id'],
-                    'question_id'               => ['required', 'string', 'exists:questions,id'],
-                    'result'                    => ['required', 'numeric', 'min:1'],
-                ]);
-                break;
-
-            case 'update-img':
-                break;
-
-            default:
-                $validation = validator($request->all(), [
-                    'user_id'                   => ['required', 'string', 'exists:users,id'],
-                    'question_id'               => ['required', 'string', 'exists:questions,id'],
-                    'result'                    => ['required', 'numeric', 'min:1'],
-                ]);
-                break;
-        }
-
-        return $validation;
     }
 }

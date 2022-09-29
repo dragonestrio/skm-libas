@@ -98,12 +98,14 @@
                                 is-invalid
                             @enderror">
                               @if (old('question_id') != null)
-                                <?php $question_recent_name = $question->where('id', old('question_id'))->first()->name; ?>
-                                <option value="{{ old('question_id') }}">{{ ucwords($question_recent_name) }}</option>
+                                @foreach ($question as $item)
+                                    @if ($item->id == old('question_id'))
+                                    <option value="{{ old('question_id') }}">{{ ucwords($item->name) }}</option>
+                                    @endif
+                                @endforeach
                               @else
                                 @if (isset($report))
-                                  <?php $question_recent_name = $question->where('id', $report->question_id)->first()->name; ?>
-                                  <option value="{{ $report->question_id }}">{{ ucwords($question_recent_name) }}</option>  
+                                <option value="{{ $report->question_id }}">{{ ucwords($report->questions_name) }}</option>
                                 @endif
                               @endif
 

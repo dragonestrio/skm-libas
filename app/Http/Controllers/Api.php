@@ -10,29 +10,30 @@ class Api extends Controller
     public function sendGet($data = null, $url = null, $id = null)
     {
         if ($data == null && $url == null) {
-            return json_decode($this->responseError('Data or Url is not valid', null));
+            return $this->responseError('Data or Url is not valid', null);
         }
 
         if ($id == null) {
-            $result = Http::withBody(json_encode($data), 'application/json')->get($url);
+            $result = Http::withBody(json_encode($data), 'application/json')->get($url)->body();
         } else {
-            $result = Http::withBody(json_encode($data), 'application/json')->get($url . '?id=' . $id)->body();
+            $result = Http::withBody(json_encode($data), 'application/json')->get($url . '/' . $id)->body();
         }
-        dd($result);
+
         return json_decode($result);
     }
 
     public function sendPost($data = null, $url = null, $id = null)
     {
-        if ($data == null || $url == null) {
-            return json_decode($this->responseError('Data or Url is not valid', null));
+        if ($data == null && $url == null) {
+            return $this->responseError('Data or Url is not valid', null);
         }
 
         if ($id == null) {
             $result = Http::withBody(json_encode($data), 'application/json')->post($url)->body();
         } else {
-            $result = Http::withBody(json_encode($data), 'application/json')->post($url . '?id=' . $id)->body();
+            $result = Http::withBody(json_encode($data), 'application/json')->post($url . '/' . $id)->body();
         }
+
         return json_decode($result);
     }
 
@@ -61,8 +62,8 @@ class Api extends Controller
         return response()->json([
             'code'  => 422,
             'success' => false,
-            'data' => null,
-            'error' => $validator->errors()->first()
+            'error' => 'Failed to Validate',
+            'data' => $validator->errors(),
         ], 422);
     }
 }

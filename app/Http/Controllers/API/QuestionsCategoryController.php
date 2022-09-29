@@ -4,47 +4,41 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
-use App\Models\Unit;
+use App\Models\Questions_category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
-class UnitController extends Controller
+class QuestionsCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request, Api $api)
     {
-        $units = Unit::orderBy('name');
+        $question_categories = Questions_category::orderBy('name');
 
         if ($request->input('search')) {
-            $units
+            $question_categories
                 ->where('name', 'like', '%' . $request->input('search') . '%');
         }
 
         if (count($request->input()) == 0) {
-            $data = $units->get();
+            $data = $question_categories->get();
         } else {
-            $data = $units->paginate(8);
+            $data = $question_categories->paginate(8);
         }
 
-        return $api->responseSuccess('Unit', $data);
+        return $api->responseSuccess('Question Category', $data);
     }
 
-    public function show(Api $api, Unit $unit)
+    public function show(Api $api, Questions_category $questions_category)
     {
-        $units = $unit::where('id', $unit->id);
+        $question_categories = $questions_category::where('id', $questions_category->id);
+        $check_question_categories = $question_categories->count();
 
-        $check_units = $units->count();
-
-        if ($check_units == 0) {
+        if ($check_question_categories == 0) {
             return $api->responseError('Data not found');
         }
 
-        $data = $units->first();
-        return $api->responseSuccess('Unit', $data);
+        $data = $question_categories->first();
+        return $api->responseSuccess('Question Category', $data);
     }
 
     public function store(Request $request, Api $api)
@@ -58,7 +52,7 @@ class UnitController extends Controller
             'name'          => $request->input('name'),
         ];
 
-        $result = Unit::create($data);
+        $result = Questions_category::create($data);
         if ($result == true) {
             return $api->responseSuccess('Success', $data);
         } else {
@@ -66,7 +60,7 @@ class UnitController extends Controller
         };
     }
 
-    public function update(Request $request, Api $api, Unit $unit)
+    public function update(Request $request, Api $api, Questions_category $questions_category)
     {
         $validate = $this->validation('update', $request);
         if ($validate->fails()) {
@@ -77,7 +71,7 @@ class UnitController extends Controller
             'name'          => $request->input('name'),
         ];
 
-        $result = Unit::where('id', $unit->id)->update($data);
+        $result = Questions_category::where('id', $questions_category->id)->update($data);
         if ($result == true) {
             return $api->responseSuccess('Success', $data);
         } else {
@@ -85,9 +79,9 @@ class UnitController extends Controller
         };
     }
 
-    public function destroy(Api $api, Unit $unit)
+    public function destroy(Api $api, Questions_category $questions_category)
     {
-        $result = $unit::destroy($unit->id);
+        $result = $questions_category::destroy($questions_category->id);
 
         if ($result == true) {
             return $api->responseSuccess('Success');
@@ -104,7 +98,7 @@ class UnitController extends Controller
 
             case 'update':
                 $validation = validator($request->all(), [
-                    'name'                  => ['required', 'string', 'min:3', 'max:50'],
+                    'name'                  => ['required', 'string', 'min:5', 'max:50'],
                 ]);
                 break;
 
@@ -113,7 +107,7 @@ class UnitController extends Controller
 
             default:
                 $validation = validator($request->all(), [
-                    'name'                  => ['required', 'string', 'min:3', 'max:50', 'unique:units,name'],
+                    'name'                  => ['required', 'string', 'min:5', 'max:50', 'unique:questions_categories,name'],
                 ]);
                 break;
         }

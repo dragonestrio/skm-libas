@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\QuestionController as APIQuestionController;
+use App\Http\Controllers\API\QuestionsCategoryController as APIQuestionsCategoryController;
+use App\Http\Controllers\API\UnitController as APIUnitController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginHistoryController;
 use App\Http\Controllers\MhsController;
@@ -9,6 +12,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UsersController;
 use App\Models\Users;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
@@ -46,26 +50,22 @@ Route::resource('users', UsersController::class)->middleware('superadmin');
 
 // unit fokus
 Route::resource('units', UnitController::class)->except('show')->middleware('superadmin');
-// Route::resource('units', UnitController::class)->except('show', 'store', 'update', 'destroy')->middleware('superadmin');
-// api
-// Route::get(date('d_m_Y_', time()) . 'units', [UnitController::class, 'show'])->middleware('superadmin');
-// Route::get(date('d_m_Y_', time()) . 'units/{unit}', [UnitController::class, 'show'])->middleware('superadmin');
-// Route::post(date('d_m_Y_', time()) . 'units', [UnitController::class, 'store'])->middleware('superadmin');
-// Route::put(date('d_m_Y_', time()) . 'units/{unit}', [UnitController::class, 'update'])->middleware('superadmin');
-// Route::delete(date('d_m_Y_', time()) . 'units/{unit}', [UnitController::class, 'destroy'])->middleware('superadmin');
-// 
+Route::get('units/{unit}', [UnitController::class, 'show']);
 //
 
 // kategori pertanyaan
 Route::resource('questions_categories', QuestionsCategoryController::class)->except('show')->middleware('superadmin');
+Route::get('questions_categories/{questions_category}', [QuestionsCategoryController::class, 'show']);
 // 
 
 // pertanyaan
 Route::resource('questions', QuestionController::class)->except('show')->middleware('superadmin');
+Route::get('questions/{question}', [QuestionController::class, 'show']);
 // 
 
 // laporan kuesioner
 Route::resource('reports', ReportController::class)->except('show')->middleware('superadmin');
+Route::get('reports/{report}', [ReportController::class, 'show']);
 // 
 
 // login history

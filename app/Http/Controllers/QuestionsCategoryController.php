@@ -14,14 +14,12 @@ class QuestionsCategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, Api $api)
     {
-        $question_category = Questions_category::orderBy('name');
-
-        if ($request->input('search')) {
-            $question_category
-                ->where('name', 'like', '%' . $request->input('search') . '%');
-        }
+        ($request->input('page') == null) ? $request->merge(['page' => 1]) : '';
+        (count($request->input()) > 0)
+            ? $questions_categories = $api->sendGet($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions_categories'), null)
+            : $questions_categories = $api->sendGet(null, url('api/' . date('d_m_Y_', time()) . 'questions_categories'), null);
 
         $data = [
             'title'                     => 'Kategori Pertanyaan',
@@ -30,7 +28,7 @@ class QuestionsCategoryController extends Controller
             'description'               => '',
             'state'                     => 'read',
             'position'                  => 'kategori pertanyaan',
-            'question_category'         => $question_category->simplePaginate(8),
+            'question_category'         => $questions_categories->data,
         ];
 
         return view('question_category.index', $data);
@@ -61,18 +59,14 @@ class QuestionsCategoryController extends Controller
      * @param  \App\Http\Requests\StoreQuestions_categoryRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Api $api)
     {
-        $validate = $this->validation(false, $request);
-        if ($validate->fails()) {
-            return redirect('questions_categories/create')->withErrors($validate)->withInput();
+        $questions_categories = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions_categories'), null);
+        if (isset($questions_categories->error) && $questions_categories->error == 'Failed to Validate') {
+            return redirect('questions_categories/create')->withErrors($questions_categories->data)->withInput();
         }
 
-        $data = [
-            'name'          => $request->input('name'),
-        ];
-
-        $result = Questions_category::create($data);
+        $result = $questions_categories->success;
         if ($result == true) {
             return redirect('questions_categories')->with('notif-y', 'sukses');
         } else {
@@ -88,7 +82,8 @@ class QuestionsCategoryController extends Controller
      */
     public function show(Questions_category $questions_category)
     {
-        //
+        // EMPTY
+        return abort(404);
     }
 
     /**
@@ -97,9 +92,11 @@ class QuestionsCategoryController extends Controller
      * @param  \App\Models\Questions_category  $questions_category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Questions_category $questions_category)
+    public function edit(Questions_category $questions_category, Request $request, Api $api)
     {
-        $check_question_category = $questions_category::where('id', $questions_category->id)->count();
+        $questions_categories = $api->sendGet($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions_categories'), $questions_category->id);
+        $check_questions_categories = count((array) $questions_categories->data);
+
         $data = [
             'title'                     => 'Perbarui Kategori Pertanyaan',
             'app'                       => 'SKM LIBAS',
@@ -107,8 +104,8 @@ class QuestionsCategoryController extends Controller
             'description'               => '',
             'state'                     => 'update',
             'position'                  => 'kategori pertanyaan',
-            'question_category_count'   => $check_question_category,
-            'question_category'         => $questions_category::where('id', $questions_category->id)->first(),
+            'question_category_count'   => $check_questions_categories,
+            'question_category'         => $questions_categories->data
         ];
 
         return view('question_category.form', $data);
@@ -121,18 +118,14 @@ class QuestionsCategoryController extends Controller
      * @param  \App\Models\Questions_category  $questions_category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Questions_category $questions_category)
+    public function update(Request $request, Questions_category $questions_category, Api $api)
     {
-        $validate = $this->validation('update', $request);
-        if ($validate->fails()) {
-            return redirect('questions_categories/' . $questions_category->id . '/edit')->withErrors($validate)->withInput();
+        $questions_categories = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions_categories'), $questions_category->id);
+        if (isset($questions_categories->error) && $questions_categories->error == 'Failed to Validate') {
+            return redirect('questions_categories/' . $questions_category->id . '/edit')->withErrors($questions_categories->data)->withInput();
         }
 
-        $data = [
-            'name'          => $request->input('name'),
-        ];
-
-        $result = Questions_category::where('id', $questions_category->id)->update($data);
+        $result = $questions_categories->success;
         if ($result == true) {
             return redirect('questions_categories')->with('notif-y', 'sukses');
         } else {
@@ -146,39 +139,15 @@ class QuestionsCategoryController extends Controller
      * @param  \App\Models\Questions_category  $questions_category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Questions_category $questions_category)
+    public function destroy(Questions_category $questions_category, Api $api, Request $request)
     {
-        $result = $questions_category::destroy($questions_category->id);
+        $questions_categories = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions_categories'), $questions_category->id);
 
+        $result = $questions_categories->success;
         if ($result == true) {
             return redirect('questions_categories')->with('notif-y', 'sukses');
         } else {
             return redirect('questions_categories')->with('notif-x', 'error');
         }
-    }
-
-    public function validation($type = false, $request)
-    {
-        switch ($type) {
-            case 'login':
-                break;
-
-            case 'update':
-                $validation = validator($request->all(), [
-                    'name'                  => ['required', 'string', 'min:5', 'max:50'],
-                ]);
-                break;
-
-            case 'update-img':
-                break;
-
-            default:
-                $validation = validator($request->all(), [
-                    'name'                  => ['required', 'string', 'min:5', 'max:50', 'unique:questions_categories,name'],
-                ]);
-                break;
-        }
-
-        return $validation;
     }
 }

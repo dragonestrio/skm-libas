@@ -105,17 +105,19 @@
                       <tr>
                         <th class="text-capitalize text-xxs text-start">user</th>
                         <th class="text-capitalize text-xxs text-start">pertanyaan</th>
-                        <th class="text-capitalize text-xxs text-start">nilai</th>
+                        <th class="text-capitalize text-xxs text-center">nilai/jawaban</th>
+                        <th class="text-capitalize text-xxs text-center">tanggal pengisian</th>
                         <th class="text-capitalize text-xxs text-center">aksi</th>
                       </tr>
                     </thead>
                     <tbody>
 
-                      @foreach ($report as $item)
+                      @foreach ($report->data as $item)
                       <tr class="fw-bolder">
                         <td class="text-lowercase px-4">{{ $item->users_email }}</td>
-                        <td class="text-capitalize px-4">{{ $item->question_name }}</td>
-                        <td class="text-capitalize px-4">{{ $item->result }}</td>
+                        <td class="text-capitalize px-4">{{ $item->questions_name }}</td>
+                        <td class="text-capitalize px-4 text-center">{{ $item->result }}</td>
+                        <td class="text-capitalize px-4 text-center">{{ date('d M Y, h:i:s', strtotime($item->created_at)) }}</td>
                         <td>
                           <div class="d-flex justify-content-center">
                             {{-- <a href="{{ url('reports/'.$item->id) }}" class="btn shadow-none text-decoration-none fw-bold px-3 py-0">
@@ -169,7 +171,38 @@
               </div>
             </div>
             <div class="d-flex justify-content-center pb-5">
-                {{ $report->links() }}
+
+              {{-- {{ $report->links() }} --}}
+              <?php $next_text = 'Next »'; $next_page = $report->current_page + 1; ?>
+              <?php $prev_text = '« Previous'; $prev_page = $report->current_page - 1; ?>
+              @if ($report->last_page > 1)
+              <nav role="navigation" aria-label="Pagination Navigation" class="flex justify-between">
+                  {{-- Previous Page Link --}}
+                  @if ($report->prev_page_url == null)
+                      <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 rounded-md">
+                        {{ $prev_text }}
+                      </span>
+                      @else
+                      <a href="{{ url()->current().'?page='.$prev_page }}" rel="prev" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                        {{ $prev_text }}
+                          {{-- click --}}
+                      </a>
+                  @endif
+
+                  {{-- Next Page Link --}}
+                  @if ($report->next_page_url != null)
+                      <a href="{{ url()->current().'?page='.$next_page }}" rel="next" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                          {{ $next_text }}
+                          {{-- click --}}
+                        </a>
+                        @else
+                        <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 rounded-md">
+                        {{ $next_text }}
+                      </span>
+                  @endif
+              </nav>
+              @endif
+
             </div>
           </div>
         </div>
