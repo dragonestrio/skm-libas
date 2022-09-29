@@ -20,7 +20,7 @@ class Question extends Model
     ];
 
     protected $hidden = [
-        'id',
+        // 'id',
     ];
 
     protected $casts = [

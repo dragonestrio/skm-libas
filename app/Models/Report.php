@@ -19,7 +19,7 @@ class Report extends Model
     ];
 
     protected $hidden = [
-        'id',
+        // 'id',
     ];
 
     protected $casts = [

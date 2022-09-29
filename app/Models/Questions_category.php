@@ -19,7 +19,7 @@ class Questions_category extends Model
     ];
 
     protected $hidden = [
-        'id',
+        // 'id',
     ];
 
     protected $casts = [

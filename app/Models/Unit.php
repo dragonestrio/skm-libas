@@ -19,7 +19,7 @@ class Unit extends Model
     ];
 
     protected $hidden = [
-        'id',
+        // 'id',
     ];
 
     protected $casts = [
