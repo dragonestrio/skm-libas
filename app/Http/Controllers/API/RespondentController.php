@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Question;
 use App\Models\Respondent;
 use App\Models\RespondentDetail;
+use App\Models\Unit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -53,13 +54,15 @@ class RespondentController extends Controller
         return $this->success("Jawaban telah dikumpulkan", null, 200);
     }
 
-    public function index(Request $request, $date = "")
+    public function index(Request $request, $unit = "1", $date = "")
     {
+        //add default to current month and year
         $current_year = Carbon::today()->format("Y");
         $current_month = Carbon::today()->format("m");
 
+        //set default of set by selected date
         if (empty($date)) {
-            $date = Carbon::createFromFormat('m-Y', $date);
+            $date = Carbon::now()->format("F Y");
         } else {
             $current_year = Carbon::createFromFormat('m-Y', $date)->format('Y');
             $current_month = Carbon::createFromFormat('m-Y', $date)->format('m');
@@ -67,8 +70,12 @@ class RespondentController extends Controller
             $date = Carbon::createFromFormat('m-Y', $date)->format('F Y');
         }
 
+        //query
         $datas = RespondentDetail::selectRaw("SUM(answer) as total_answer, COUNT(*) as total_data, (SUM(answer) / COUNT(*)) as rata_rata, ROUND(((SUM(answer) / COUNT(*)) * 0.111), 2 ) as ikm, questions_categorie_id")
             ->groupBy("questions_categorie_id")
+            ->whereHas("respondent", function ($query) use ($unit) {
+                $query->where("unit_id", $unit);
+            })
             ->whereYear("created_at", $current_year)
             ->whereMonth("created_at", $current_month)
             ->with("category")
@@ -94,7 +101,11 @@ class RespondentController extends Controller
             $rata_rata_ikm = $total_ikm / $total_data_ikm;
         }
 
+        //get unit
+        $unit = Unit::find($unit);
 
+
+        $data["unit"] = $unit;
         $data["respondents"] = $datas;
         $data["list_cart_name"] = $list_cart_name;
         $data["list_cart_value"] = $list_cart_value;

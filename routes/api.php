@@ -21,5 +21,5 @@ Route::get('unit', [UnitController::class, "index"]);
 Route::get('questions', [QuestionController::class, "index"]);
 Route::post('respondent/add', [RespondentController::class, "insert"]);
 
-Route::get('respondent/result', [RespondentController::class, "index"]);
-Route::get('respondent/result/{date}', [RespondentController::class, "index"]);
+Route::get('respondent/result/{unit}', [RespondentController::class, "index"]);
+Route::get('respondent/result/{unit}/{date}', [RespondentController::class, "index"]);

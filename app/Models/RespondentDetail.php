@@ -17,6 +17,11 @@ class RespondentDetail extends Model
         "questions_categorie_id"
     ];
 
+    public function respondent()
+    {
+        return $this->belongsTo(Respondent::class, "respondent_id", "id");
+    }
+
     public function question()
     {
         return $this->belongsTo(Question::class, "question_id", "id");
