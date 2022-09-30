@@ -1231,7 +1231,7 @@
     listExam.innerHTML = "";
         listExam.innerHTML += `
         <h1 class="mb-4">${Exams.name}</h1>
-        <h4 class="mb-4">Kategori : ${Exams.question_category.name}</h4>
+        <h4 class="mb-4">Kategori : ${Exams.category.name}</h4>
        `
       };
 
