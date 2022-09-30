@@ -360,6 +360,9 @@ let data = { }
   
   const getalldata = () => {
     console.log(data)
+
+    localStorage.setItem("data", JSON.stringify(data))
+    window.location.href = '/exams';
   }
 
 

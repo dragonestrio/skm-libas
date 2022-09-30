@@ -1213,29 +1213,29 @@
   </div>
 </section>
 <script>
-//   const listExam = document.querySelector('#Exams')
+  const listExam = document.querySelector('#Exams')
 
-//   const getlistExam = () => {
-//     fetch(('https://admin.skm.pcctabessmg.xyz/api/questions'))
-//     .then((response) => {
-//        return response.json();
-//     }).then((responseJson) => {
-//       console.log(responseJson.data.data[0]);
-//       showListExam(responseJson.data.data[0])
-//     }).catch((err) => {
-//       console.error(err);
-//     });
-//   }
+  const getlistExam = () => {
+    fetch(('https://admin.skm.pcctabessmg.xyz/api/questions'))
+    .then((response) => {
+       return response.json();
+    }).then((responseJson) => {
+      console.log(responseJson.data.data[0]);
+      showListExam(responseJson.data.data[0])
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
 
-//   const showListExam = Exams => {
-//     listExam.innerHTML = "";
-//         listExam.innerHTML += `
-//         <h1 class="mb-4">${Exams.name}</h1>
-//         <h4 class="mb-4">Kategori : ${Exams.question_category.name}</h4>
-//        `
-//       };
+  const showListExam = Exams => {
+    listExam.innerHTML = "";
+        listExam.innerHTML += `
+        <h1 class="mb-4">${Exams.name}</h1>
+        <h4 class="mb-4">Kategori : ${Exams.question_category.name}</h4>
+       `
+      };
 
-//   document.addEventListener('DOMContentLoaded', getlistExam);
+  document.addEventListener('DOMContentLoaded', getlistExam);
 
 // button clik get
 
