@@ -9,7 +9,7 @@
         <div class="container-fluid">
           <div class="logo gap-4">
             <a class="link-logo" href="#">
-              <img src="http://127.0.0.1:8000/assets/images/logo.png" class="" href="https://restabessmg.jateng.polri.go.id/" alt="">
+              <img src="{{ url('assets/images/logo.png') }}" class="" href="https://restabessmg.jateng.polri.go.id/" alt="">
             </a>
             <a class="link fw-bold" href="https://restabessmg.jateng.polri.go.id/">POLRESTABES SEMARANG</a>
           </div>
