@@ -6,27 +6,27 @@
 
   @import url('http://fonts.cdnfonts.com/css/frutiger?styles=28198,15520');
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
-  
+
   .title h1{
        margin-top: 2rem;
        font-family: 'Frutiger', sans-serif;
        font-weight: bold;
-       font-size: 2.8rem !important; 
+       font-size: 2.8rem !important;
        margin-bottom: 3rem;
   }
-  
+
   .btn-group > form {
     display: inline-block;
     flex-wrap: wrap;
     margin-bottom: 2rem;
     font-size: 1.1rem
   }
-  
-  
+
+
   .btn-group > form > h1 {
-    font-size: 1.3rem 
-  } 
-  .btn-group > form > h4 { 
+    font-size: 1.3rem
+  }
+  .btn-group > form > h4 {
   font-size: 1.15rem
   }
   .btn-radio {
@@ -70,7 +70,7 @@
     transition: 0.25s ease;
     box-shadow: inset 0 0 0 0.125em #00005c;
   }
-  
+
     /* .btn-group {
       position: absolute;
       top: 0;
@@ -82,21 +82,21 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
-      
+
     } */
-  
+
     .btn-wrap {
       display: flex;
       flex-direction: column;
-      
+
     }
     /* .isi-survey {
       margin: 0 14rem;
     } */
-    
-  
+
+
     @import url("https://fonts.googleapis.com/css?family=Mukta:700");
-  
+
   .btn-next-prev button {
       font-family: "Mukta", sans-serif !important;
       font-size: 1rem;
@@ -182,19 +182,19 @@
   .btn-next-prev button:hover .button-text {
       color: #fff;
   }
-  
+
   .exam {
     margin-bottom: 7rem;
   }
-  
+
   @media only screen and (min-width: 1200px) {
     .isi-survey #Exams {
       padding: 0 23rem
     }
-  }  
-  
+  }
+
   @media only screen and (max-width: 1200px) {
-   
+
     .btn-next-prev button.learn-more {
       width: 11rem;
     }
@@ -202,15 +202,15 @@
       padding: 0 12rem
     }
   }
-  
-  
+
+
   @media only screen and (max-width: 992px) {
     .btn-next-prev button.learn-more {
       width: 11rem;
     }
     .title h1 {
       font-size: 2.6rem !important;
-  
+
     }
     .isi-survey {
       padding: 0 9rem
@@ -219,10 +219,10 @@
     .isi-survey #Exams {
     padding: 0rem;
     }
-  
+
   }
-  
-  
+
+
   /* Small devices (portrait tablets and large phones, 600px and up) */
   @media only screen and (max-width: 768px) {
     .title h1 {
@@ -236,9 +236,9 @@
       padding: 0 8rem
     }
 
-  
+
   }
-  
+
   /* Small devices (portrait tablets and large phones, 600px and up) */
   @media only screen and (max-width: 600px) {
     .title h1 {
@@ -256,7 +256,7 @@
     .btn-group > form > h4 {
       font-size: 1.4rem;
     }
-    .btn-group > form{ 
+    .btn-group > form{
       font-size: 0.9rem;
     }
   }
@@ -1178,7 +1178,7 @@
               </div>
           </div>
       </div>
-  
+
       <div class="emoji emoji--wow">
           <div class="emoji__face">
               <div class="emoji__eyebrows"></div>
