@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Question;
 use App\Models\Respondent;
 use App\Models\RespondentDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RespondentController extends Controller
 {
@@ -35,13 +38,56 @@ class RespondentController extends Controller
         $list_respondent = $request->answers;
         foreach ($list_respondent as $detail) {
 
-            $detail_respondent = new RespondentDetail();
-            $detail_respondent->question_id = $detail["question_id"];
-            $detail_respondent->answer = $detail["answer"];
-            $detail_respondent->respondent_id = $respondent_id;
-            $detail_respondent->save();
+            //get question
+            $question = Question::find($detail["question_id"]);
+            if ($question) {
+                $detail_respondent = new RespondentDetail();
+                $detail_respondent->question_id = $detail["question_id"];
+                $detail_respondent->answer = $detail["answer"];
+                $detail_respondent->respondent_id = $respondent_id;
+                $detail_respondent->questions_categorie_id = $question->questions_categorie_id;
+                $detail_respondent->save();
+            }
         }
 
         return $this->success("Jawaban telah dikumpulkan", null, 200);
+    }
+
+    public function index(Request $request)
+    {
+        $current_year = Carbon::today()->format("Y");
+        $current_month = Carbon::today()->format("m");
+
+        $datas = RespondentDetail::selectRaw("SUM(answer) as total_answer, COUNT(*) as total_data, (SUM(answer) / COUNT(*)) as rata_rata, ROUND(((SUM(answer) / COUNT(*)) * 0.111), 2 ) as ikm, questions_categorie_id")
+            ->groupBy("questions_categorie_id")
+            ->whereYear("created_at", $current_year)
+            ->whereMonth("created_at", $current_month)
+            ->with("category")
+            ->get();
+
+
+        $list_cart_name = array();
+        $list_cart_value = array();
+
+        $total_ikm = 0;
+        $total_data_ikm = 0;
+        $rata_rata_ikm = 0;
+
+        foreach ($datas as $value) {
+            array_push($list_cart_name, $value->category->name);
+            array_push($list_cart_value, $value->ikm);
+
+            $total_data_ikm += 1;
+            $total_ikm += $value->ikm;
+        }
+
+        $rata_rata_ikm = $total_ikm / $total_data_ikm;
+
+        $data["respondents"] = $datas;
+        $data["list_cart_name"] = $list_cart_name;
+        $data["list_cart_value"] = $list_cart_value;
+        $data["rata_rata_ikm"] = $rata_rata_ikm;
+
+        return $this->success("Data Respondent $current_month $current_year", $data, 200);
     }
 }

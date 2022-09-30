@@ -14,5 +14,16 @@ class RespondentDetail extends Model
         "respondent_id",
         "question_id",
         "answer",
+        "questions_categorie_id"
     ];
+
+    public function question()
+    {
+        return $this->belongsTo(Question::class, "question_id", "id");
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Questions_category::class, "questions_categorie_id", "id");
+    }
 }

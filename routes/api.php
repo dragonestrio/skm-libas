@@ -20,3 +20,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('unit', [UnitController::class, "index"]);
 Route::get('questions', [QuestionController::class, "index"]);
 Route::post('respondent/add', [RespondentController::class, "insert"]);
+
+Route::get('respondent/result', [RespondentController::class, "index"]);
