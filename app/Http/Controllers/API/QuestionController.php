@@ -15,7 +15,7 @@ class QuestionController extends Controller
         $question = cache('questionCache');
 
         $data = [];
-        if ($question) {
+        if (!$question) {
             $data = Question::with("category")->orderBy("questions_categorie_id", "ASC")->simplePaginate(1);
 
             Cache::put('questionCache', $data, now()->addMinutes(60));
@@ -23,6 +23,11 @@ class QuestionController extends Controller
             $data = $question;
         }
 
-        return $this->success("Daftar Pertanyaan", $data, 200);
+        return response([
+            'code' => 200,
+            'success' => true,
+            'message' => "Daftar Pertanyaan",
+            'data' => $data,
+        ], 200);
     }
 }

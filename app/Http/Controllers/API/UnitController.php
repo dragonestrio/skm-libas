@@ -30,6 +30,6 @@ class UnitController extends Controller
             $data = $unit;
         }
 
-        return $this->success("Daftar Pertanyaan", $data, 200);
+        return $this->success("Daftar Unit", $data, 200);
     }
 }
