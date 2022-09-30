@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\UnitController;
+use App\Http\Controllers\API\RespondentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('unit', [UnitController::class, "index"]);
 Route::get('questions', [QuestionController::class, "index"]);
+Route::post('respondent/add', [RespondentController::class, "insert"]);

@@ -23,11 +23,6 @@ class QuestionController extends Controller
             $data = $question;
         }
 
-        return response([
-            'code' => 200,
-            'success' => true,
-            'message' => "Pertanyaan",
-            'data' => $data,
-        ], 200);
+        return $this->success("Daftar Pertanyaan", $data, 200);
     }
 }

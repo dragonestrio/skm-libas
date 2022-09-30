@@ -30,11 +30,6 @@ class UnitController extends Controller
             $data = $unit;
         }
 
-        return response([
-            'code' => 200,
-            'success' => true,
-            'message' => "Unit Focus",
-            'data' => $data,
-        ], 200);
+        return $this->success("Daftar Pertanyaan", $data, 200);
     }
 }
