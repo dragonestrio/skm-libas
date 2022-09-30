@@ -12,16 +12,7 @@ class QuestionController extends Controller
     public function index(Request $request)
     {
 
-        $question = cache('questionCache');
-
-        $data = [];
-        if (!$question) {
-            $data = Question::with("category")->orderBy("questions_categorie_id", "ASC")->simplePaginate(1);
-
-            Cache::put('questionCache', $data, now()->addMinutes(60));
-        } else {
-            $data = $question;
-        }
+        $data = Question::with("category")->orderBy("questions_categorie_id", "ASC")->simplePaginate(1);
 
         return response([
             'code' => 200,
