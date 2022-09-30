@@ -18,10 +18,6 @@ class Unit extends Model
         // 'id',
     ];
 
-    protected $hidden = [
-        'id',
-    ];
-
     protected $casts = [
         // 'email_verified_at' => 'datetime',
     ];
