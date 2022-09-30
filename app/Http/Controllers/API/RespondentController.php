@@ -53,10 +53,19 @@ class RespondentController extends Controller
         return $this->success("Jawaban telah dikumpulkan", null, 200);
     }
 
-    public function index(Request $request)
+    public function index(Request $request, $date = "")
     {
         $current_year = Carbon::today()->format("Y");
         $current_month = Carbon::today()->format("m");
+
+        if (empty($date)) {
+            $date = Carbon::createFromFormat('m-Y', $date);
+        } else {
+            $current_year = Carbon::createFromFormat('m-Y', $date)->format('Y');
+            $current_month = Carbon::createFromFormat('m-Y', $date)->format('m');
+
+            $date = Carbon::createFromFormat('m-Y', $date)->format('F Y');
+        }
 
         $datas = RespondentDetail::selectRaw("SUM(answer) as total_answer, COUNT(*) as total_data, (SUM(answer) / COUNT(*)) as rata_rata, ROUND(((SUM(answer) / COUNT(*)) * 0.111), 2 ) as ikm, questions_categorie_id")
             ->groupBy("questions_categorie_id")
@@ -81,12 +90,16 @@ class RespondentController extends Controller
             $total_ikm += $value->ikm;
         }
 
-        $rata_rata_ikm = $total_ikm / $total_data_ikm;
+        if ($total_ikm > 0) {
+            $rata_rata_ikm = $total_ikm / $total_data_ikm;
+        }
+
 
         $data["respondents"] = $datas;
         $data["list_cart_name"] = $list_cart_name;
         $data["list_cart_value"] = $list_cart_value;
         $data["rata_rata_ikm"] = $rata_rata_ikm;
+        $data["selected_date"] = $date;
 
         return $this->success("Data Respondent $current_month $current_year", $data, 200);
     }
