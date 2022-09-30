@@ -1134,43 +1134,15 @@
     </div>
     <div class="isi-survey">
     <div class="btn-wrap">
-
-      {{-- <div class="btn-group d-flex justify-content-center" >
-        <form >
-          <div id="Exams"></div>
-          <div class="text-center">
-            <label class="btn-radio">
-                <input type="radio" name="radio" checked />
-                <span></span>
-            </label>
-            <label class="btn-radio">
-                <input type="radio" name="radio" />
-                <span></span>
-            </label>
-            <label class="btn-radio">
-                <input type="radio" name="radio" checked />
-                <span></span>
-            </label>
-            <label class="btn-radio">
-                <input type="radio" name="radio" />
-                <span></span>
-            </label>
-            <label class="btn-radio">
-                <input type="radio" name="radio" checked />
-                <span></span>
-            </label>
-          </div>
-        </form>
-      </div> --}}
         <div id="Exams"></div>
       <div class="text-center">
-        <div class="emoji emoji--yay">
+        <div onclick="getAnswer(5)" class="emoji emoji--yay">
           <div class="emoji__face">
               <div class="emoji__eyebrows"></div>
               <div class="emoji__mouth"></div>
           </div>
       </div>
-      <div class="emoji emoji--haha">
+      <div onclick="getAnswer(4)" class="emoji emoji--haha">
           <div class="emoji__face">
               <div class="emoji__eyes"></div>
               <div class="emoji__mouth">
@@ -1179,21 +1151,21 @@
           </div>
       </div>
 
-      <div class="emoji emoji--wow">
+      <div onclick="getAnswer(3)" class="emoji emoji--wow">
           <div class="emoji__face">
               <div class="emoji__eyebrows"></div>
               <div class="emoji__eyes"></div>
               <div class="emoji__mouth"></div>
           </div>
       </div>
-      <div class="emoji emoji--sad">
+      <div onclick="getAnswer(2)" class="emoji emoji--sad">
           <div class="emoji__face">
               <div class="emoji__eyebrows"></div>
               <div class="emoji__eyes"></div>
               <div class="emoji__mouth"></div>
           </div>
       </div>
-      <div class="emoji emoji--angry">
+      <div onclick="getAnswer(1)" class="emoji emoji--angry">
           <div class="emoji__face">
               <div class="emoji__eyebrows"></div>
               <div class="emoji__eyes"></div>
@@ -1203,25 +1175,42 @@
       </div>
     </div>
   </div>
-    <div class="btn-next-prev">
-      <button class="learn-more">
-          <span class="circle" aria-hidden="true">
-              <span class="icon arrow"></span>
-          </span>
-          <span class="button-text">Previous</span>
-      </button>
+  <div class="d-flex justify-content-between">
+      <div class="btn-next-prev">
+        <button class="learn-more">
+            <span class="circle" aria-hidden="true">
+                <span class="icon arrow"></span>
+            </span>
+            <span class="button-text">Previous</span>
+        </button>
+    </div>
+    <div>
+        <button onclick="sendData()" id="myBtn" class="learn-more">
+            <span class="circle" aria-hidden="true">
+                <span class="icon arrow"></span>
+            </span>
+            <span class="button-text">Finish</span>
+        </button>
+    </div>
   </div>
 </section>
 <script>
+  let answers = []
+  let question_id = null
+  let currentQuestion = 1
+  let isLastPage = false
+  let data = JSON.parse(localStorage.getItem('data'))
   const listExam = document.querySelector('#Exams')
 
   const getlistExam = () => {
-    fetch(('https://admin.skm.pcctabessmg.xyz/api/questions'))
+    fetch((`https://admin.skm.pcctabessmg.xyz/api/questions?page=${currentQuestion}`))
     .then((response) => {
        return response.json();
     }).then((responseJson) => {
-      console.log(responseJson.data.data[0]);
-      showListExam(responseJson.data.data[0])
+        const data = responseJson.data.data[0]
+        question_id = data.id
+        isLastPage = responseJson.data.next_page_url ? false : true
+        showListExam(data)
     }).catch((err) => {
       console.error(err);
     });
@@ -1235,10 +1224,30 @@
        `
       };
 
-  document.addEventListener('DOMContentLoaded', getlistExam);
+    const getAnswer = value => {
+        answers.push({question_id: question_id, answer: value})
+        if (!isLastPage) {
+            currentQuestion++
+            getlistExam()
+        }
+    }
 
-// button clik get
+    const sendData = () => {
+        data.answers = answers
 
+        fetch('https://admin.skm.pcctabessmg.xyz/api/respondent/add', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(res => window.location.href = '/thanks');
+        }
+
+    document.addEventListener('DOMContentLoaded', getlistExam);
 
 </script>
 <style>
