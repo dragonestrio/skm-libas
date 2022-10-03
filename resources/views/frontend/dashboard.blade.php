@@ -27,10 +27,8 @@ crossorigin="anonymous"
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>  
 <div class="container-fluid">
   <div class="row justify-content-center">
-      <div class="col-12">
-          <h3 class="text-center w-100 my-4" style="font-weight: 700">
-              Survei Kepuasan Masyarakat Satuan Lalulintas Polrestabes Semarang Maret 2021
-          </h3>
+      <div class="col-12" id="title">
+
           <hr class="mb-4 w-100" />
       </div>
   </div>
@@ -46,11 +44,8 @@ crossorigin="anonymous"
                   </tr>
               </thead>
               <tbody>
-                  <tr>
-                      <td>Kesesuaian Persyaratan dengan Jenis Pelayanan</td>
-                      <td>3.41</td>
-                      <td>0.111</td>
-                      <td>0.38</td>
+                  <tr id="total_survey">
+
                   </tr>
                   <tr>
                       <td>Kemudahan Prosedur Pelayanan</td>
@@ -157,25 +152,73 @@ body {
           });
         </script>
         <script>
-            var ctx = document.getElementById("ikm-mei-chart").getContext("2d");
+            
+
+
+            // const label = labels.push('')
+
+
+
+
+            const title = document.querySelector('#title')
+            const datatable = document.querySelector('#total_survey')
+            const ListchartName = document.querySelector('#ikm-mei-chart')
+
+            const getlist = () => {
+            fetch(('https://admin.skm.pcctabessmg.xyz/api/respondent/result/1/09-2022'))
+            .then((response) => {
+                return response.json();
+            }).then((responseJson) => {
+                console.log(responseJson.data.respondents[0]);
+                console.log(responseJson.data.selected_date);
+                console.log(responseJson.data.list_cart_name[0]);
+                showListTable(responseJson.data.respondents[0]);
+                showListTitle(responseJson.data.selected_date);
+                // showchartName(responseJson.data.list_cart_name[0]);
+                getGraphic(responseJson.data.list_cart_name, responseJson.data.list_cart_value)
+            }).catch((err) => {
+                console.error(err);
+            });
+            }
+
+
+            // const showchartName = chartName => {
+            //     ListchartName.innerHTML = "";
+            //     ListchartName.innerHTML += `
+            //     <label for="">${chartName}</label>
+            //     `
+            //     };
+
+
+            const showListTitle = Calendar => {
+                title.innerHTML = "";
+                title.innerHTML += `
+                <h3 class="text-center w-100 my-4" style="font-weight: 700">
+                    Survei Kepuasan Masyarakat Satuan Lalulintas Polrestabes Semarang ${Calendar}
+                </h3>
+                `
+                };
+
+            const showListTable = ListTab => {
+                datatable.innerHTML = "";
+                datatable.innerHTML += `
+                <td>${ListTab.category.name}</td>
+                <td>${ListTab.rata_rata}</td>
+                <td>0.111</td>
+                <td>${ListTab.ikm}</td>
+                `
+                };
+
+            const getGraphic = (labels, datasets) => {
+                var ctx = document.getElementById("ikm-mei-chart").getContext("2d");
             new Chart(ctx, {
                 type: "bar",
                 data: {
-                    labels: [
-                        "Kesesuaian P.",
-                        "Kemudahan Prosedur P.",
-                        "Kecepatan P.",
-                        "Kewajaran Biaya",
-                        "Kesesuaian Standar",
-                        "Kompetensi Petugas",
-                        "Kesopanan dan Keramahan",
-                        "Kualisan S&P",
-                        "Penanganan Pengaduan",
-                    ],
+                    labels: labels,
                     datasets: [
                         {
                             label: "Indeks Kepuasan Masyarakat",
-                            data: [3.41, 3.59, 3.53, 3.06, 3.66, 3.66, 3.91, 3.78, 3.84],
+                            data: datasets,
                             backgroundColor: [
                                 "rgba(255, 99, 132, 0.2)",
                                 "rgba(54, 162, 235, 0.2)",
@@ -195,5 +238,8 @@ body {
                     },
                 },
             });
+            }
+
+            document.addEventListener('DOMContentLoaded', getlist);
         </script>
 @endsection

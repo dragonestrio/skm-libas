@@ -351,6 +351,15 @@
     data.gender = value
   }
 
+  
+  const getalldata = () => {
+    console.log(data)
+
+    localStorage.setItem("data", JSON.stringify(data))
+    window.location.href = '/exams';
+  }
+
+
   const education = (value) => {
     data.education = value
   }

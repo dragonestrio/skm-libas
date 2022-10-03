@@ -1275,8 +1275,8 @@
   const showListExam = Exams => {
     listExam.innerHTML = "";
         listExam.innerHTML += `
+        <h4 class="mb-4">KATEGORI : ${Exams.category.name}</h4>
         <h1 class="mb-4">${Exams.name}</h1>
-        <h4 class="mb-4">Kategori : ${Exams.category.name}</h4>
        `
       };
 
@@ -1309,11 +1309,13 @@
 <style>
   .btn-wrap h1 {
     font-size: 18px;
-  }
-  .btn-wrap h4 {
-    font-size: 16px
-
-  }
+    line-height: 30px;
+}
+.btn-wrap h4 {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
 </style>
 
 @endsection
