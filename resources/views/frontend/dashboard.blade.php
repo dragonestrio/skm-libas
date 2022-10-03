@@ -104,7 +104,7 @@ crossorigin="anonymous"
                 <label for="date" class="col-sm-2 col-lg-1 col-form-label">Tanggal</label>
                 <div class="col-sm-5 mx-sm-3 mx-lg-4">
                     <div class="input-group date" id="datepicker">
-                        <input type="text" class="form-control" />
+                        <input onchange="getDate()" type="text" class="form-control" />
                         <span class="input-group-append">
                             <span class="input-group-text bg-white d-block">
                                 <i class="fa fa-calendar"></i>
@@ -148,17 +148,14 @@ body {
         ></script>
         <script type="text/javascript">
           $(function () {
-              $("#datepicker").datepicker();
+              $("#datepicker").datepicker({
+                format: "mm-yyyy",
+                startView: "months", 
+                minViewMode: "months"
+              });
           });
         </script>
         <script>
-            
-
-
-            // const label = labels.push('')
-
-
-
 
             const title = document.querySelector('#title')
             const datatable = document.querySelector('#total_survey')
@@ -174,21 +171,11 @@ body {
                 console.log(responseJson.data.list_cart_name[0]);
                 showListTable(responseJson.data.respondents[0]);
                 showListTitle(responseJson.data.selected_date);
-                // showchartName(responseJson.data.list_cart_name[0]);
                 getGraphic(responseJson.data.list_cart_name, responseJson.data.list_cart_value)
             }).catch((err) => {
                 console.error(err);
             });
             }
-
-
-            // const showchartName = chartName => {
-            //     ListchartName.innerHTML = "";
-            //     ListchartName.innerHTML += `
-            //     <label for="">${chartName}</label>
-            //     `
-            //     };
-
 
             const showListTitle = Calendar => {
                 title.innerHTML = "";
