@@ -16,10 +16,10 @@
           <div class="d-flex">
             <ul class="navbar-nav mb-lg-0 menu link ">
               <li class="nav-item">
-                <a class="nav-link active text-white " aria-current="page" href="#">Dashboard</a>
+                <a class="nav-link active text-white " aria-current="page" href="/dashboard">Dashboard</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="#">Survey</a>
+                <a class="nav-link text-white" href="/">Survey</a>
               </li>
             </ul>
           </div>
@@ -43,7 +43,7 @@
             width: 100%;
         }
         .logo p > a{
-          color: #ffffff; 
+          color: #ffffff;
           text-align: left;
         }
         .link {
@@ -53,7 +53,7 @@
         }
         .navbar-skm {
             padding: 1rem 10rem;
-            background-color: #343434;    
+            background-color: #343434;
         }
         .menu {
           display: flex;
@@ -97,7 +97,7 @@
           width: 13rem;
         }
       }
-       
+
       /* Medium devices (landscape tablets, 768px and up) */
       @media only screen and (min-width: 768px) {
         .navbar-skm {
@@ -107,7 +107,7 @@
           font-size: 1.1rem;
         }
         .menu li {
-          
+
         }
         .link {
             font-size: 18px;
@@ -144,6 +144,6 @@
 
     </style>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>    
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
 </body>
 </html>

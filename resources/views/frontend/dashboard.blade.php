@@ -13,7 +13,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/boot
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
 />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script
 src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
 integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
@@ -24,7 +24,7 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
 integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
 crossorigin="anonymous"
 ></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <div class="container-fluid">
   <div class="row justify-content-center">
       <div class="col-12" id="title">
@@ -43,11 +43,8 @@ crossorigin="anonymous"
                       <th>SKM</th>
                   </tr>
               </thead>
-              <tbody>
-                  <tr id="total_survey">
-
-                  </tr>
-                  <tr>
+              <tbody id="total_survey">
+                  {{-- <tr>
                       <td>Kemudahan Prosedur Pelayanan</td>
                       <td>3.59</td>
                       <td>0.111</td>
@@ -94,7 +91,7 @@ crossorigin="anonymous"
                       <td>3.84</td>
                       <td>0.111</td>
                       <td>0.43</td>
-                  </tr>
+                  </tr> --}}
               </tbody>
           </table>
       </div>
@@ -104,7 +101,7 @@ crossorigin="anonymous"
                 <label for="date" class="col-sm-2 col-lg-1 col-form-label">Tanggal</label>
                 <div class="col-sm-5 mx-sm-3 mx-lg-4">
                     <div class="input-group date" id="datepicker">
-                        <input onchange="getDate()" type="text" class="form-control" />
+                        <input type="text" class="form-control" id="date" onchange="getDateValue()" />
                         <span class="input-group-append">
                             <span class="input-group-text bg-white d-block">
                                 <i class="fa fa-calendar"></i>
@@ -114,7 +111,9 @@ crossorigin="anonymous"
                  </div>
              </div>
           </form>
-          <canvas class="w-100" id="ikm-mei-chart"></canvas>
+          <div id="wrap-chart">
+              <canvas class="w-100" id="ikm-mei-chart"></canvas>
+          </div>
           <table class="table table-responsive table-bordered w-100 mt-4">
               <thead>
                   <tr>
@@ -146,35 +145,35 @@ body {
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
         ></script>
-        <script type="text/javascript">
-          $(function () {
-              $("#datepicker").datepicker({
-                format: "mm-yyyy",
-                startView: "months", 
-                minViewMode: "months"
-              });
-          });
-        </script>
         <script>
-
             const title = document.querySelector('#title')
             const datatable = document.querySelector('#total_survey')
             const ListchartName = document.querySelector('#ikm-mei-chart')
+            const currentMonth = new Date().getMonth() + 1
+            const currentYear = new Date().getFullYear()
+            let filterDate = `${currentMonth}-${currentYear}`
+            let unitId = 1
+
+            $(function () {
+              $("#datepicker").datepicker({
+                format: "mm-yyyy",
+                startView: "months",
+                minViewMode: "months"
+              });
+          });
 
             const getlist = () => {
-            fetch(('https://admin.skm.pcctabessmg.xyz/api/respondent/result/1/09-2022'))
-            .then((response) => {
-                return response.json();
-            }).then((responseJson) => {
-                console.log(responseJson.data.respondents[0]);
-                console.log(responseJson.data.selected_date);
-                console.log(responseJson.data.list_cart_name[0]);
-                showListTable(responseJson.data.respondents[0]);
-                showListTitle(responseJson.data.selected_date);
-                getGraphic(responseJson.data.list_cart_name, responseJson.data.list_cart_value)
-            }).catch((err) => {
-                console.error(err);
-            });
+                let link = `https://admin.skm.pcctabessmg.xyz/api/respondent/result/1/${filterDate}`
+                fetch((link))
+                .then((response) => {
+                    return response.json();
+                }).then((responseJson) => {
+                    showListTitle(responseJson.data.selected_date);
+                    getGraphic(responseJson.data.list_cart_name, responseJson.data.list_cart_value)
+                    showListTable(responseJson.data.respondents);
+                }).catch((err) => {
+                    console.error(err);
+                });
             }
 
             const showListTitle = Calendar => {
@@ -188,43 +187,57 @@ body {
 
             const showListTable = ListTab => {
                 datatable.innerHTML = "";
-                datatable.innerHTML += `
-                <td>${ListTab.category.name}</td>
-                <td>${ListTab.rata_rata}</td>
-                <td>0.111</td>
-                <td>${ListTab.ikm}</td>
-                `
-                };
+                ListTab.forEach(item => {
+                    datatable.innerHTML += `
+                    <tr>
+                        <td>${item.category.name}</td>
+                        <td>${item.rata_rata}</td>
+                        <td>0.111</td>
+                        <td>${item.ikm}</td>
+                    </tr>
+                    `
+                });
+            }
 
             const getGraphic = (labels, datasets) => {
+                $("canvas#ikm-mei-chart").remove();
+                $("#wrap-chart").append('<canvas class="w-100" id="ikm-mei-chart"></canvas>');
                 var ctx = document.getElementById("ikm-mei-chart").getContext("2d");
-            new Chart(ctx, {
-                type: "bar",
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: "Indeks Kepuasan Masyarakat",
-                            data: datasets,
-                            backgroundColor: [
-                                "rgba(255, 99, 132, 0.2)",
-                                "rgba(54, 162, 235, 0.2)",
-                                "rgba(255, 206, 86, 0.2)",
-                                "rgba(75, 192, 192, 0.2)",
-                                "rgba(153, 102, 255, 0.2)",
-                                "rgba(255, 159, 64, 0.2)",
+
+                new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: "Indeks Kepuasan Masyarakat",
+                                    data: datasets,
+                                    backgroundColor: [
+                                        "rgba(255, 99, 132, 0.2)",
+                                        "rgba(54, 162, 235, 0.2)",
+                                        "rgba(255, 206, 86, 0.2)",
+                                        "rgba(75, 192, 192, 0.2)",
+                                        "rgba(153, 102, 255, 0.2)",
+                                        "rgba(255, 159, 64, 0.2)",
+                                    ],
+                                },
                             ],
                         },
-                    ],
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                },
+                            },
                         },
-                    },
-                },
-            });
+                    });
+
+            }
+
+            const getDateValue = (value) => {
+                filterDate = $("#date").val()
+
+                getlist()
             }
 
             document.addEventListener('DOMContentLoaded', getlist);
