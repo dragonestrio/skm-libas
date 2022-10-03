@@ -97,7 +97,8 @@
 
     @import url("https://fonts.googleapis.com/css?family=Mukta:700");
 
-  .btn-next-prev button {
+  .btn-prev button,
+  .btn-next button {
       font-family: "Mukta", sans-serif !important;
       font-size: 1rem;
       position: relative;
@@ -112,7 +113,7 @@
       font-size: inherit;
       font-family: inherit;
   }
-  .btn-next-prev button.learn-more {
+  .btn-prev button.learn-more {
       width: 11rem;
       height: auto;
       position: fixed;
@@ -122,7 +123,18 @@
       display: flex;
       flex-direction: row-reverse;
   }
-  .btn-next-prev button.learn-more .circle {
+
+  .btn-next button.learn-more {
+      width: 10rem;
+      height: auto;
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      margin: 2rem;
+  }
+
+  .btn-prev button.learn-more .circle,
+  .btn-next button.learn-more .circle {
       transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
       position: relative;
       display: block;
@@ -132,7 +144,9 @@
       background: #282936;
       border-radius: 1.625rem;
   }
-  .btn-next-prev button.learn-more .circle .icon {
+
+  .btn-prev button.learn-more .circle .icon,
+  .btn-next button.learn-more .circle .icon {
       transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
       position: absolute;
       top: 0;
@@ -140,25 +154,43 @@
       margin: auto;
       background: #fff;
   }
-  .btn-next-prev button.learn-more .circle .icon.arrow {
+  .btn-prev button.learn-more .circle .icon.arrow {
       transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
       left: 1.225rem;
       width: 1.125rem;
       height: 0.125rem;
       background: none;
   }
-  .btn-next-prev button.learn-more .circle .icon.arrow::before {
+
+    .btn-next button.learn-more .circle .icon.arrow {
+      transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+      left: 0.625rem;
+      width: 1.125rem;
+      height: 0.125rem;
+      background: none;
+  }
+
+  .btn-prev button.learn-more .circle .icon.arrow::before,
+  .btn-next button.learn-more .circle .icon.arrow::before {
       position: absolute;
       content: "";
       top: -0.25rem;
-      left: 0.0625rem;
       width: 0.625rem;
       height: 0.625rem;
       border-top: 0.125rem solid #fff;
       border-right: 0.125rem solid #fff;
+  }
+
+   .btn-prev button.learn-more .circle .icon.arrow::before{
+      left: 0.0625rem;
       transform: rotate(225deg);
   }
-  .btn-next-prev button.learn-more .button-text {
+
+   .btn-next button.learn-more .circle .icon.arrow::before{
+      right: 0.0625rem;
+      transform: rotate(45deg);
+  }
+  .btn-prev button.learn-more .button-text {
       transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
       position: absolute;
       top: 0;
@@ -172,14 +204,33 @@
       text-align: center;
       text-transform: uppercase;
   }
-  .btn-next-prev button:hover .circle {
+
+    .btn-next button.learn-more .button-text {
+      transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0.75rem 0;
+      margin: 0 0 0 1.85rem;
+      color: #282936;
+      font-weight: 700;
+      line-height: 1.6;
+      text-align: center;
+      text-transform: uppercase;
+  }
+
+  .btn-prev button:hover .circle,
+  .btn-next button:hover .circle {
       width: 100%;
   }
-  .btn-next-prev button:hover .circle .icon.arrow {
+  .btn-prev button:hover .circle .icon.arrow,
+  .btn-next button:hover .circle .icon.arrow {
       background: #fff;
-      transform: translate(7rem, 0);
+      transform: translate(1rem, 0);
   }
-  .btn-next-prev button:hover .button-text {
+  .btn-prev button:hover .button-text {
       color: #fff;
   }
 
@@ -195,7 +246,7 @@
 
   @media only screen and (max-width: 1200px) {
 
-    .btn-next-prev button.learn-more {
+    .btn-prev button.learn-more {
       width: 11rem;
     }
     .isi-survey #Exams {
@@ -205,7 +256,7 @@
 
 
   @media only screen and (max-width: 992px) {
-    .btn-next-prev button.learn-more {
+    .btn-prev button.learn-more {
       width: 11rem;
     }
     .title h1 {
@@ -228,7 +279,7 @@
     .title h1 {
       font-size: 2.3rem !important;
     }
-    .btn-next-prev button.learn-more {
+    .btn-prev button.learn-more {
       width: 11rem;
       margin: 2rem 1rem;
     }
@@ -247,10 +298,10 @@
     .exam {
       margin-bottom: 5rem;
     }
-    .btn-next-prev button.learn-more {
+    .btn-prev button.learn-more {
       margin: 1rem;
     }
-    .btn-next-prev button.learn-more {
+    .btn-prev button.learn-more {
       width: 11rem;
     }
     .btn-group > form > h4 {
@@ -1176,21 +1227,25 @@
     </div>
   </div>
   <div class="d-flex justify-content-between">
-      <div class="btn-next-prev">
-        <button class="learn-more">
-            <span class="circle" aria-hidden="true">
-                <span class="icon arrow"></span>
-            </span>
-            <span class="button-text">Previous</span>
-        </button>
+      <div class="btn-prev">
+        <a href="index.html">
+            <button class="learn-more">
+                <span class="circle" aria-hidden="true">
+                    <span class="icon arrow"></span>
+                </span>
+                <span class="button-text">Previous</span>
+            </button>
+        </a>
     </div>
     <div>
+      <div class="btn-next">
         <button onclick="sendData()" id="myBtn" class="learn-more">
             <span class="circle" aria-hidden="true">
                 <span class="icon arrow"></span>
             </span>
             <span class="button-text">Finish</span>
         </button>
+      </div>
     </div>
   </div>
 </section>
@@ -1215,6 +1270,7 @@
       console.error(err);
     });
   }
+
 
   const showListExam = Exams => {
     listExam.innerHTML = "";
