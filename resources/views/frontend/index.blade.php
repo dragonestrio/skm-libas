@@ -6,22 +6,22 @@
 
   @import url('http://fonts.cdnfonts.com/css/frutiger?styles=28198,15520');
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
-  
+
   .title h1{
        margin-top: 2rem;
        font-family: 'Frutiger', sans-serif;
        font-weight: bold;
-       font-size: 2.8rem !important; 
+       font-size: 2.8rem !important;
        margin-bottom: 3rem;
   }
-  
+
   .btn-group > form {
     display: inline-block;
     flex-wrap: wrap;
     margin-bottom: 2rem;
   }
-  
-  .btn-group > form > h4 { 
+
+  .btn-group > form > h4 {
   font-size: 1.3rem
   }
   .btn-radio {
@@ -63,7 +63,7 @@
     transition: 0.25s ease;
     box-shadow: inset 0 0 0 0.125em #00005c;
   }
-  
+
     /* .btn-group {
       position: absolute;
       top: 0;
@@ -75,19 +75,19 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
-      
+
     } */
-  
+
     .btn-wrap {
       display: flex;
       flex-direction: column;
       margin: 0 14rem;
     }
-  
-    
-  
+
+
+
     @import url("https://fonts.googleapis.com/css?family=Mukta:700");
-  
+
   .btn-next-prev button {
       font-family: "Mukta", sans-serif !important;
       font-size: 1rem;
@@ -110,8 +110,8 @@
       bottom: 0;
       right: 0;
       margin: 2rem;
-  
-  
+
+
   }
   .btn-next-prev button.learn-more .circle {
       transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
@@ -174,41 +174,41 @@
   .btn-next-prev button:hover .button-text {
       color: #fff;
   }
-  
+
   .skm {
     margin-bottom: 7rem;
     font-family: 'Poppins', sans-serif;
   }
-  
-  
-  @media only screen and (min-width: 1200px) { 
-    .btn-wrap { 
+
+
+  @media only screen and (min-width: 1200px) {
+    .btn-wrap {
       margin: 0 18rem;
     }
   }
-  
+
   @media only screen and (max-width: 1200px) {
     .btn-wrap {
-      margin: 0 12rem; 
+      margin: 0 12rem;
     }
   }
-  
-  
+
+
   @media only screen and (max-width: 992px) {
     .btn-next-prev button.learn-more {
       width: 9rem;
     }
     .btn-wrap {
-      margin: 0 10rem; 
+      margin: 0 10rem;
     }
     .title h1 {
       font-size: 2.6rem !important;
-  
+
     }
-  
+
   }
-  
-  
+
+
   /* Small devices (portrait tablets and large phones, 600px and up) */
   @media only screen and (max-width: 768px) {
     .title h1 {
@@ -221,9 +221,9 @@
       width: 9rem;
       margin: 2rem 1rem;
     }
-  
+
   }
-  
+
   /* Small devices (portrait tablets and large phones, 600px and up) */
   @media only screen and (max-width: 600px) {
     .title h1 {
@@ -244,7 +244,7 @@
     .btn-group > form > h4 {
       font-size: 1.3rem;
     }
-    .btn-group > form{ 
+    .btn-group > form{
       font-size: 0.9rem;
     }
   }
@@ -254,12 +254,12 @@
       <h1 class="text-center">FORM SURVEY <br>KEPUASAAN MASYARAKAT</h1>
     </div>
     <div class="btn-wrap row">
-      
+
         <div class="btn-group row">
             <h4>Jenis Kelamin</h4>
             <div >
               <label class="btn-radio">
-                  <input onchange="gender('M')" type="radio" name="gender"  />
+                  <input onchange="gender('M')" type="radio" name="gender" required   />
                   <span>Laki - laki</span>
               </label>
               <label class="btn-radio">
@@ -308,7 +308,7 @@
           </div>
       </div>
     <div class="btn-next-prev">
-      <button onclick="getalldata()" class="learn-more">
+      <button onclick="getalldata()" id="myBtn" class="learn-more">
           <span class="circle" aria-hidden="true">
               <span class="icon arrow"></span>
           </span>
@@ -317,22 +317,20 @@
   </div>
 </section>
 
-<script> 
+<script>
+    let data = {
+        gender: '',
+        education: '',
+        unit_id: ''
+    }
 
-let data = { }
-
-
-
-// get unit fokus
-
+    // get unit fokus
   const listUnit = document.querySelector('#Unit-list');
-
   const getlistUnit = () => {
     fetch(('https://admin.skm.pcctabessmg.xyz/api/unit'))
      .then((response) => {
        return response.json();
     }).then((responseJson) => {
-      console.log(responseJson.data);
       showListUnit(responseJson.data)
     }).catch((err) => {
       console.error(err);
@@ -350,8 +348,6 @@ let data = { }
         `
       });
   }
-
-  // button radio
 
   const gender = (value) => {
     data.gender = value
@@ -374,7 +370,12 @@ let data = { }
     data.unit_id = value
   }
 
-  // 
+  const getalldata = () => {
+    if (data.gender !== '' && data.education !== '' && data.unit_id !== '') {
+        localStorage.setItem('data', JSON.stringify(data))
+        window.location.href = '/exams'
+    }
+  }
 
   document.addEventListener('DOMContentLoaded', getlistUnit);
 </script>
