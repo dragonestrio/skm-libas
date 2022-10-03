@@ -19,9 +19,9 @@ class ReportController extends Controller
     public function index(Request $request, Api $api, Questions_category $questions_category)
     {
         if ($questions_category->id == null) {
-            $reports = $api->sendGet($request->input(), url('api/' . 'reports'), null);
+            $reports = $api->sendGet($request->input(), url('api/' . 'respondent'), null);
         } else {
-            $reports = $api->sendGet($request->input(), url('api/' . 'reports/' . $questions_category->id), null);
+            $reports = $api->sendGet($request->input(), url('api/' . 'respondent/' . $questions_category->id), null);
         }
 
         // dd($reports);

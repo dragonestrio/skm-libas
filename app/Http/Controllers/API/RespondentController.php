@@ -32,6 +32,9 @@ class RespondentController extends Controller
             $data = $respondents->paginate(8);
         }
 
+        $cache_name = 'respondentCache';
+        $cache = cache($cache_name);
+        Cache::put($cache_name, $data, now()->addMinutes(strtotime('1 minutes')));
         return $api->responseSuccess('Respondent', $data);
     }
 
@@ -51,6 +54,9 @@ class RespondentController extends Controller
         }
 
         $data = $respondents->first();
+        $cache_name = 'respondentCache';
+        $cache = cache($cache_name);
+        Cache::put($cache_name, $data, now()->addMinutes(strtotime('1 minutes')));
         return $api->responseSuccess('Respondent', $data);
     }
 

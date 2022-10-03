@@ -25,6 +25,9 @@ class QuestionsCategoryController extends Controller
             $data = $question_categories->paginate(8);
         }
 
+        $cache_name = 'question_categoryCache';
+        $cache = cache($cache_name);
+        Cache::put($cache_name, $data, now()->addMinutes(strtotime('1 minutes')));
         return $api->responseSuccess('Question Category', $data);
     }
 
@@ -38,6 +41,9 @@ class QuestionsCategoryController extends Controller
         }
 
         $data = $question_categories->first();
+        $cache_name = 'question_categoryCache';
+        $cache = cache($cache_name);
+        Cache::put($cache_name, $data, now()->addMinutes(strtotime('1 minutes')));
         return $api->responseSuccess('Question Category', $data);
     }
 
