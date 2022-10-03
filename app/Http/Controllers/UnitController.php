@@ -16,10 +16,12 @@ class UnitController extends Controller
      */
     public function index(Request $request, Api $api)
     {
-        ($request->input('page') == null) ? $request->merge(['page' => 1]) : '';
-        (count($request->input()) > 0)
-            ? $units = $api->sendGet($request->input(), url('api/' . date('d_m_Y_', time()) . 'units'), null)
-            : $units = $api->sendGet(null, url('api/' . date('d_m_Y_', time()) . 'units'), null);
+        $units = Unit::orderBy('name');
+
+        if ($request->input('search')) {
+            $units
+                ->where('name', 'like', '%' . $request->input('search') . '%');
+        }
 
         $data = [
             'title'         => 'Unit Fokus',
@@ -28,7 +30,7 @@ class UnitController extends Controller
             'description'   => '',
             'state'         => 'read',
             'position'      => 'unit fokus',
-            'units'         => $units->data,
+            'units'         => $units->simplePaginate(8),
         ];
 
         return view('units.index', $data);
@@ -61,12 +63,16 @@ class UnitController extends Controller
      */
     public function store(Request $request, Api $api)
     {
-        $units = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'units'), null);
-        if (isset($units->error) && $units->error == 'Failed to Validate') {
-            return redirect('units/create')->withErrors($units->data)->withInput();
+        $validate = $this->validation(false, $request);
+        if ($validate->fails()) {
+            return redirect('units/create')->withErrors($validate)->withInput();
         }
 
-        $result = $units->success;
+        $data = [
+            'name'          => $request->input('name'),
+        ];
+
+        $result = Unit::create($data);
         if ($result == true) {
             return redirect('units')->with('notif-y', 'sukses');
         } else {
@@ -94,8 +100,8 @@ class UnitController extends Controller
      */
     public function edit(Unit $unit, Api $api, Request $request)
     {
-        $units = $api->sendGet($request->input(), url('api/' . date('d_m_Y_', time()) . 'units'), $unit->id);
-        $check_units = count((array) $units->data);
+        $units = $unit::where('id', $unit->id);
+        $check_units = $units->count();
 
         $data = [
             'title'         => 'Perbarui Unit Fokus',
@@ -105,7 +111,7 @@ class UnitController extends Controller
             'state'         => 'update',
             'position'      => 'unit fokus',
             'units_count'   => $check_units,
-            'units'         => $units->data,
+            'units'         => $units->first(),
         ];
 
         return view('units.form', $data);
@@ -120,12 +126,16 @@ class UnitController extends Controller
      */
     public function update(Request $request, Unit $unit, Api $api)
     {
-        $units = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'units'), $unit->id);
-        if (isset($units->error) && $units->error == 'Failed to Validate') {
-            return redirect('units/' . $unit->id . '/edit')->withErrors($units->data)->withInput();
+        $validate = $this->validation('update', $request);
+        if ($validate->fails()) {
+            return redirect('units/' . $unit->id . '/edit')->withErrors($validate)->withInput();
         }
 
-        $result = $units->success;
+        $data = [
+            'name'          => $request->input('name'),
+        ];
+
+        $result = Unit::where('id', $unit->id)->update($data);
         if ($result == true) {
             return redirect('units')->with('notif-y', 'sukses');
         } else {
@@ -141,13 +151,37 @@ class UnitController extends Controller
      */
     public function destroy(Unit $unit, Api $api, Request $request)
     {
-        $questions = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'units'), $unit->id);
+        $result = $unit::destroy($unit->id);
 
-        $result = $questions->success;
         if ($result == true) {
             return redirect('units')->with('notif-y', 'sukses');
         } else {
             return redirect('units')->with('notif-x', 'error');
         }
+    }
+
+    public function validation($type = false, $request)
+    {
+        switch ($type) {
+            case 'login':
+                break;
+
+            case 'update':
+                $validation = validator($request->all(), [
+                    'name'                  => ['required', 'string', 'min:3', 'max:50'],
+                ]);
+                break;
+
+            case 'update-img':
+                break;
+
+            default:
+                $validation = validator($request->all(), [
+                    'name'                  => ['required', 'string', 'min:3', 'max:50', 'unique:units,name'],
+                ]);
+                break;
+        }
+
+        return $validation;
     }
 }

@@ -84,54 +84,97 @@
                 @endswitch
               </div>
               <div class="col-12 col-lg-12 py-3 px-5">
-                <form action="{{ (isset($question)) ? url('questions/'.$question->id) : url('questions') }}" method="post" enctype="multipart/form-data" id="form">
+                <form action="{{ (isset($respondent)) ? url('respondents/'.$respondent->id) : url('respondents') }}" method="post" enctype="multipart/form-data" id="form">
                     @csrf
-                    @if (isset($question))
+                    @if (isset($respondent))
                         @method('put')
                     @endif
                     <div class="row py-2">
                         <div class="col-4 col-lg-4">
-                            <p class="text-capitalize fs-5 p-0 m-0 text-sm fw-bold">Kategori Pertanyaan</p>
+                            <p class="text-capitalize fs-5 p-0 m-0 text-sm fw-bold">Unit</p>
                         </div>
                         <div class="col-8 col-lg-8">
-                            <select name="questions_categorie_id" class="form-control @error('questions_categorie_id')
+                            <select name="unit_id" class="form-control @error('unit_id')
                                 is-invalid
                             @enderror">
-                              @if (old('questions_categorie_id') != null)
-                                @foreach ($questions_category as $item)
-                                    @if ($item->id == old('questions_categorie_id'))
-                                    <option value="{{ old('questions_categorie_id') }}">{{ ucwords($item->name) }}</option>
+                              @if (old('unit_id') != null)
+                                @foreach ($unit as $item)
+                                    @if ($item->id == old('unit_id'))
+                                    <option value="{{ old('unit_id') }}">{{ ucwords($item->name) }}</option>
                                     @endif
                                 @endforeach
                               @else
-                                @if (isset($question))
-                                  @foreach ($questions_category as $item)
-                                      @if ($item->id == $question->questions_categorie_id)
+                                @if (isset($respondent))
+                                  @foreach ($unit as $item)
+                                      @if ($item->id == $respondent->unit_id)
                                       <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
                                       @endif
                                   @endforeach
                                 @endif
                               @endif
 
-                            @foreach ($questions_category as $item)
+                            @foreach ($unit as $item)
                             <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
                             @endforeach
                             </select>
                             
-                            @error('questions_categorie_id')
+                            @error('unit_id')
                             <p class="p-0 m-0 text-danger text-input-failed">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
                     <div class="row py-2">
                         <div class="col-4 col-lg-4">
-                            <p class="text-capitalize fs-5 p-0 m-0 text-sm fw-bold">nama</p>
+                            <p class="text-capitalize fs-5 p-0 m-0 text-sm fw-bold">jenis kelamin</p>
                         </div>
                         <div class="col-8 col-lg-8">
-                            <input type="text" name="name" class="form-control @error('name')
+                            <select name="gender" class="form-control @error('gender')
+                                is-invalid
+                            @enderror">
+                              @if (old('gender') != null)
+                                @switch(old('gender'))
+                                    @case('L')
+                                        <option value="L">Laki-laki</option>
+                                        @break
+                                    @case('P') 
+                                        <option value="P">Perempuan</option>   
+                                        @break
+                                    @default
+                                        
+                                @endswitch
+                              @else
+                                @if (isset($respondent))
+                                    @switch($respondent->gender)
+                                        @case('L')
+                                            <option value="L">Laki-laki</option>
+                                            @break
+                                        @case('P') 
+                                            <option value="P">Perempuan</option>   
+                                            @break
+                                        @default
+                                            
+                                    @endswitch
+                                @endif
+                              @endif
+
+                              <option value="L">Laki-laki</option>    
+                              <option value="P">Perempuan</option>   
+                            </select>
+                            
+                            @error('gender')
+                            <p class="p-0 m-0 text-danger text-input-failed">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="row py-2">
+                        <div class="col-4 col-lg-4">
+                            <p class="text-capitalize fs-5 p-0 m-0 text-sm fw-bold">pendidikan</p>
+                        </div>
+                        <div class="col-8 col-lg-8">
+                            <input type="text" name="education" class="form-control @error('education')
                             is-invalid
-                            @enderror" value="{{ (old('name') != null) ? old('name') : (isset($question) ? $question->name : '') }}" required autofocus>
-                            @error('name')
+                            @enderror" value="{{ (old('education') != null) ? old('education') : (isset($respondent) ? $respondent->education : '') }}" required autofocus>
+                            @error('education')
                             <p class="p-0 m-0 text-danger text-input-failed">{{ $message }}</p>
                             @enderror
                         </div>
@@ -142,7 +185,7 @@
                         <button onclick="history.back()" class="btn btn-success bg-gradient-success form-control text-uppercase fw-bold" role="button">kembali</button>
                     </div>
                     <div class="col-6 col-lg-6">
-                        <button form="form" class="btn btn-primary bg-gradient-primary form-control text-uppercase fw-bold" role="button">{{ (isset($question)) ? 'perbarui' : 'buat' }}</button>
+                        <button form="form" class="btn btn-primary bg-gradient-primary form-control text-uppercase fw-bold" role="button">{{ (isset($respondent)) ? 'perbarui' : 'buat' }}</button>
                     </div>
                 </div>
 

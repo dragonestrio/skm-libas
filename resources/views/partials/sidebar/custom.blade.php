@@ -32,6 +32,16 @@
             <span class="nav-link-text ms-1 text-capitalize">Admin</span>
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link @if ($position == 'responden')
+            active
+          @endif" href="{{ url('respondents') }}">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-circle-08 text-warning text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1 text-capitalize">Responden</span>
+          </a>
+        </li>
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Kuesioner</h6>
         </li>
@@ -71,7 +81,7 @@
         <li class="nav-item">
           <a class="nav-link @if ($position == 'laporan kuesioner')
             active
-          @endif" href="{{ url('reports') }}">
+          @endif" href="{{ url('reports') }}" target="_blank">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-archive-2 text-danger text-sm opacity-10"></i>
             </div>

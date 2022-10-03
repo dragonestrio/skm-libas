@@ -9,6 +9,7 @@ use App\Http\Controllers\MhsController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionsCategoryController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RespondentController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UsersController;
 use App\Models\Users;
@@ -48,6 +49,11 @@ Route::get('dashboard', [HomeController::class, 'dashboard'])->middleware('auth'
 Route::resource('users', UsersController::class)->middleware('superadmin');
 //
 
+// responden
+Route::resource('respondents', RespondentController::class)->except('show')->middleware('superadmin');
+Route::get('respondents/{respondent}', [RespondentController::class, 'show']);
+//
+
 // unit fokus
 Route::resource('units', UnitController::class)->except('show')->middleware('superadmin');
 Route::get('units/{unit}', [UnitController::class, 'show']);
@@ -64,8 +70,8 @@ Route::get('questions/{question}', [QuestionController::class, 'show']);
 // 
 
 // laporan kuesioner
-Route::resource('reports', ReportController::class)->except('show')->middleware('superadmin');
-Route::get('reports/{report}', [ReportController::class, 'show']);
+Route::resource('reports', ReportController::class)->except('show', 'create', 'edit', 'update', 'destroy')->middleware('superadmin');
+Route::get('reports/{questions_category}', [ReportController::class, 'index']);
 // 
 
 // login history

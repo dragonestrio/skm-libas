@@ -9,7 +9,11 @@
               <div class="card card-plain">
                 <div class="card-header pb-0 text-start">
                   <h4 class="font-weight-bolder">Sign In</h4>
+                  @if ($recent_email != null)
+                  <p class="mb-0">Masuk kembali menuju Akun anda</p>
+                  @else
                   <p class="mb-0">Masukkan email dan password untuk masuk</p>
+                  @endif
                 </div>
                 <div class="card-body">
                   <form action="{{ url('login') }}" method="POST" enctype="multipart/form-data">
@@ -17,7 +21,7 @@
                     <div class="mb-3">
                       <input type="email" name="email" class="form-control form-control-lg @error('email')
                       is-invalid
-                      @enderror" value="{{ (old('email') != null) ? old('email') : (isset($users) ? $users->email : '') }}" placeholder="Email" required autofocus>
+                      @enderror" value="{{ (old('email') != null) ? old('email') : ($recent_email != null ? $recent_email : '') }}" placeholder="Email" required autofocus>
                       @error('email')
                       <p class="p-0 m-0 text-danger text-input-failed">{{ $message }}</p>
                       @enderror

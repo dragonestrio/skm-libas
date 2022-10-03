@@ -15,7 +15,7 @@ class QuestionController extends Controller
     {
         $questions = Question::join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
             ->latest('questions.created_at')
-            ->select('questions.*', 'questions_categories.name as question_category_name');
+            ->select('questions.*', 'questions_categories.name as questions_categorie_name');
 
         if ($request->input('search')) {
             $questions
@@ -36,7 +36,7 @@ class QuestionController extends Controller
     {
         $questions = $question::join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
             ->latest('questions.created_at')
-            ->select('questions.*', 'questions_categories.name as question_category_name')
+            ->select('questions.*', 'questions_categories.name as questions_categorie_name')
             ->where('questions.id', $question->id);
         $check_question = $questions->count();
 

@@ -121,26 +121,29 @@
                     </div>
                     <div class="row py-2">
                         <div class="col-4 col-lg-4">
-                            <p class="text-capitalize fs-5 p-0 m-0 text-sm fw-bold">User</p>
+                            <p class="text-capitalize fs-5 p-0 m-0 text-sm fw-bold">responden</p>
                         </div>
                         <div class="col-8 col-lg-8">
-                            <select name="user_id" class="form-control @error('user_id')
+                            <select name="respondent_id" class="form-control @error('respondent_id')
                                 is-invalid
                             @enderror">
-                            @if (old('user_id') != null)
-                            <?php $users_recent_name = $users->where('id', old('user_id'))->first()->name; ?>
-                            {!! '<option value="'.old('user_id').'">'.ucwords($users_recent_name).'</option>' !!}
+                            @if (old('respondent_id') != null)
+                              @foreach ($respondent as $item)
+                                  @if ($item->respondent_id == old('respondent_id'))
+                                  <option value="{{ old('respondent_id') }}">{{ ucwords($item->id) }}</option>
+                                  @endif
+                              @endforeach
                             @else
-                            @if (isset($report))
-                            <?php $users_recent_name = $users->where('id', $report->user_id)->first()->name; ?>
-                            <option value="{{ $report->user_id }}">{{ ucwords($users_recent_name) }}</option>  
+                              @if (isset($report))
+                              <option value="{{ $report->respondent_id }}">{{ ucwords($report->respondent_id) }}</option>
+                              @endif
                             @endif
-                            @endif
-                            @foreach ($users as $item)
-                            <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
+
+                            @foreach ($respondent as $item)
+                            <option value="{{ $item->id }}">{{ ucwords($item->id) }}</option>
                             @endforeach
                             </select>
-                            @error('user_id')
+                            @error('respondent_id')
                             <p class="p-0 m-0 text-danger text-input-failed">{{ $message }}</p>
                             @enderror
                         </div>

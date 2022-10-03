@@ -87,7 +87,7 @@
                 </form>
               </div>
               <div class="col-12 col-lg-12 pb-3 px-5">
-                <a href="{{ url('units/create') }}" class="form-control btn btn-primary bg-gradient-primary mb-0">
+                <a href="{{ url('respondents/create') }}" class="form-control btn btn-primary bg-gradient-primary mb-0">
                   <div class="input-group justify-content-center">
                     <div class="input-group-text bg-transparent border-0 pe-0 text-white">
                       <svg xmlns="http://www.w3.org/2000/svg" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
@@ -103,18 +103,35 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th class="text-capitalize text-xxs text-start">nama</th>
+                        <th class="text-capitalize text-xxs text-start">unit</th>
+                        <th class="text-capitalize text-xxs text-center">gender</th>
+                        <th class="text-capitalize text-xxs text-start">pendidikan</th>
+                        <th class="text-capitalize text-xxs text-start">tanggal pengisian</th>
                         <th class="text-capitalize text-xxs text-center">aksi</th>
                       </tr>
                     </thead>
                     <tbody>
 
-                      @foreach ($units as $item)
+                      @foreach ($respondent as $item)
                       <tr class="fw-bolder">
-                        <td class="text-capitalize px-4">{{ $item->name }}</td>
+                        <td class="text-capitalize px-4">{{ $item->units_name }}</td>
+                        @switch($item->gender)
+                            @case('L')
+                            <td class="text-capitalize text-center px-4">Laki-laki</td>
+                            @break
+
+                            @case('P')
+                            <td class="text-capitalize text-center px-4">Perempuan</td>
+                                @break
+
+                            @default
+                                
+                        @endswitch
+                        <td class="text-capitalize text-center px-4">{{ $item->education }}</td>
+                        <td class="text-capitalize px-4">{{ date('d M Y, h:i:s', strtotime($item->created_at)) }}</td>
                         <td>
                           <div class="d-flex justify-content-center">
-                            {{-- <a href="{{ url('units/'.$item->id) }}" class="btn shadow-none text-decoration-none fw-bold px-3 py-0">
+                            {{-- <a href="{{ url('respondents/'.$item->id) }}" class="btn shadow-none text-decoration-none fw-bold px-3 py-0">
                               <div class="input-group">
                                 <div class="input-group-text bg-transparent border-0 pe-0 text-primary">
                                   <svg xmlns="http://www.w3.org/2000/svg" height="16" fill="currentColor" class="bi bi-info" viewBox="0 0 16 16">
@@ -126,7 +143,7 @@
                                 </div>
                               </div>
                             </a> --}}
-                            <a href="{{ url('units/'.$item->id.'/edit') }}" class="btn shadow-none text-decoration-none fw-bold px-3 py-0">
+                            <a href="{{ url('respondents/'.$item->id.'/edit') }}" class="btn shadow-none text-decoration-none fw-bold px-3 py-0">
                               <div class="input-group">
                                 <div class="input-group-text bg-transparent border-0 pe-0 text-dark">
                                   <svg xmlns="http://www.w3.org/2000/svg" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
@@ -138,8 +155,8 @@
                                 </div>
                               </div>
                             </a>
-                            <button form="delete-{{ $item->id }}" onclick="return confirm('Apakah benar Anda ingin menghapus Admin {{ $item->name }} ?')" class="btn shadow-none fw-bold px-3 py-0">
-                              <form action="{{ url('units/'.$item->id) }}" method="post" enctype="multipart/form-data" class="d-inline" id="delete-{{ $item->id }}">
+                            <button form="delete-{{ $item->id }}" onclick="return confirm('Apakah benar Anda ingin menghapus Responden di Unit {{ $item->units_name }} ?')" class="btn shadow-none fw-bold px-3 py-0">
+                              <form action="{{ url('respondents/'.$item->id) }}" method="post" enctype="multipart/form-data" class="d-inline" id="delete-{{ $item->id }}">
                                 @method('delete')
                                 @csrf
                                 <div class="input-group">
@@ -166,7 +183,7 @@
             </div>
             <div class="d-flex justify-content-center pb-5">
 
-              {{ $units->links() }}
+              {{ $respondent->links() }}
 
             </div>
           </div>

@@ -20,10 +20,15 @@ class QuestionController extends Controller
      */
     public function index(Request $request, Api $api)
     {
-        ($request->input('page') == null) ? $request->merge(['page' => 1]) : '';
-        (count($request->input()) > 0)
-            ? $questions = $api->sendGet($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions'), null)
-            : $questions = $api->sendGet(null, url('api/' . date('d_m_Y_', time()) . 'questions'), null);
+        $questions = Question::join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
+            ->latest('questions.created_at')
+            ->select('questions.*', 'questions_categories.name as questions_categorie_name');
+
+        if ($request->input('search')) {
+            $questions
+                ->where('questions.name', 'like', '%' . $request->input('search') . '%')
+                ->orwhere('questions_categories.name', 'like', '%' . $request->input('search') . '%');
+        }
 
         $data = [
             'title'                     => 'Pertanyaan',
@@ -32,7 +37,7 @@ class QuestionController extends Controller
             'description'               => '',
             'state'                     => 'read',
             'position'                  => 'pertanyaan',
-            'question'                  => $questions->data,
+            'question'                  => $questions->simplePaginate(8),
         ];
 
         return view('question.index', $data);
@@ -52,7 +57,7 @@ class QuestionController extends Controller
             'description'           => '',
             'state'                 => 'create',
             'position'              => 'pertanyaan',
-            'questions_category'    => $api->sendGet(null, url('api/' . date('d_m_Y_', time()) . 'questions_categories'), null)->data,
+            'questions_category'    => Questions_category::get(),
         ];
 
         return view('question.form', $data);
@@ -66,12 +71,17 @@ class QuestionController extends Controller
      */
     public function store(Request $request, Api $api)
     {
-        $questions = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions'), null);
-        if (isset($questions->error) && $questions->error == 'Failed to Validate') {
-            return redirect('questions/create')->withErrors($questions->data)->withInput();
+        $validate = $this->validation(false, $request);
+        if ($validate->fails()) {
+            return redirect('questions/create')->withErrors($validate)->withInput();
         }
 
-        $result = $questions->success;
+        $data = [
+            'questions_categorie_id'    => $request->input('questions_categorie_id'),
+            'name'                      => $request->input('name'),
+        ];
+
+        $result = Question::create($data);
         if ($result == true) {
             return redirect('questions')->with('notif-y', 'sukses');
         } else {
@@ -99,8 +109,8 @@ class QuestionController extends Controller
      */
     public function edit(Api $api, Question $question, Request $request)
     {
-        $questions = $api->sendGet($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions'), $question->id);
-        $check_questions = count((array) $questions->data);
+        $questions = $question::where('id', $question->id);
+        $check_questions = $question->count();
 
         $data = [
             'title'                     => 'Perbarui Pertanyaan',
@@ -109,9 +119,9 @@ class QuestionController extends Controller
             'description'               => '',
             'state'                     => 'update',
             'position'                  => 'pertanyaan',
-            'questions_category'        => $api->sendGet(null, url('api/' . date('d_m_Y_', time()) . 'questions_categories'), null)->data,
+            'questions_category'        => Questions_category::get(),
             'question_count'            => $check_questions,
-            'question'                  => $questions->data,
+            'question'                  => $questions->first(),
         ];
 
         return view('question.form', $data);
@@ -126,12 +136,17 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Api $api, Question $question)
     {
-        $questions = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions'), $question->id);
-        if (isset($questions->error) && $questions->error == 'Failed to Validate') {
-            return redirect('questions/' . $question->id . '/edit')->withErrors($questions->data)->withInput();
+        $validate = $this->validation('update', $request);
+        if ($validate->fails()) {
+            return redirect('questions/' . $question->id . '/edit')->withErrors($validate)->withInput();
         }
 
-        $result = $questions->success;
+        $data = [
+            'questions_categorie_id' => $request->input('questions_categorie_id'),
+            'name'                  => $request->input('name'),
+        ];
+
+        $result = Question::where('id', $question->id)->update($data);
         if ($result == true) {
             return redirect('questions')->with('notif-y', 'sukses');
         } else {
@@ -147,13 +162,39 @@ class QuestionController extends Controller
      */
     public function destroy(Request $request, Api $api, Question $question)
     {
-        $questions = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions'), $question->id);
+        $result = $question::destroy($question->id);
 
-        $result = $questions->success;
         if ($result == true) {
             return redirect('questions')->with('notif-y', 'sukses');
         } else {
             return redirect('questions')->with('notif-x', 'error');
         }
+    }
+
+    public function validation($type = false, $request)
+    {
+        switch ($type) {
+            case 'login':
+                break;
+
+            case 'update':
+                $validation = validator($request->all(), [
+                    'questions_categorie_id'  => ['required', 'string', 'exists:questions_categories,id'],
+                    'name'                  => ['required', 'string', 'min:5'],
+                ]);
+                break;
+
+            case 'update-img':
+                break;
+
+            default:
+                $validation = validator($request->all(), [
+                    'questions_categorie_id'  => ['required', 'string', 'exists:questions_categories,id'],
+                    'name'                  => ['required', 'string', 'min:5'],
+                ]);
+                break;
+        }
+
+        return $validation;
     }
 }

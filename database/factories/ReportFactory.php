@@ -14,7 +14,9 @@ class ReportFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'respondent_id' => $this->faker->randomElement([1, 2, 3, 4]),
+            'question_id'   => $this->faker->randomElement([1, 2, 3]),
+            'result'        => $this->faker->randomElement([1, 2, 3, 4, 5]),
         ];
     }
 }

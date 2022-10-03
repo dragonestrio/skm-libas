@@ -16,10 +16,13 @@ class QuestionsCategoryController extends Controller
      */
     public function index(Request $request, Api $api)
     {
-        ($request->input('page') == null) ? $request->merge(['page' => 1]) : '';
-        (count($request->input()) > 0)
-            ? $questions_categories = $api->sendGet($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions_categories'), null)
-            : $questions_categories = $api->sendGet(null, url('api/' . date('d_m_Y_', time()) . 'questions_categories'), null);
+        $question_categories = Questions_category::orderBy('name');
+
+        if ($request->input('search')) {
+            $question_categories
+                ->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+
 
         $data = [
             'title'                     => 'Kategori Pertanyaan',
@@ -28,7 +31,7 @@ class QuestionsCategoryController extends Controller
             'description'               => '',
             'state'                     => 'read',
             'position'                  => 'kategori pertanyaan',
-            'question_category'         => $questions_categories->data,
+            'question_category'         => $question_categories->simplePaginate(8),
         ];
 
         return view('question_category.index', $data);
@@ -61,12 +64,16 @@ class QuestionsCategoryController extends Controller
      */
     public function store(Request $request, Api $api)
     {
-        $questions_categories = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions_categories'), null);
-        if (isset($questions_categories->error) && $questions_categories->error == 'Failed to Validate') {
-            return redirect('questions_categories/create')->withErrors($questions_categories->data)->withInput();
+        $validate = $this->validation(false, $request);
+        if ($validate->fails()) {
+            return redirect('questions_categories/create')->withErrors($validate)->withInput();
         }
 
-        $result = $questions_categories->success;
+        $data = [
+            'name'          => $request->input('name'),
+        ];
+
+        $result = Questions_category::create($data);
         if ($result == true) {
             return redirect('questions_categories')->with('notif-y', 'sukses');
         } else {
@@ -94,8 +101,8 @@ class QuestionsCategoryController extends Controller
      */
     public function edit(Questions_category $questions_category, Request $request, Api $api)
     {
-        $questions_categories = $api->sendGet($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions_categories'), $questions_category->id);
-        $check_questions_categories = count((array) $questions_categories->data);
+        $questions_categories = $questions_category::where('id', $questions_category->id);
+        $check_questions_categories = $questions_categories->count();
 
         $data = [
             'title'                     => 'Perbarui Kategori Pertanyaan',
@@ -105,7 +112,7 @@ class QuestionsCategoryController extends Controller
             'state'                     => 'update',
             'position'                  => 'kategori pertanyaan',
             'question_category_count'   => $check_questions_categories,
-            'question_category'         => $questions_categories->data
+            'question_category'         => $questions_categories->first()
         ];
 
         return view('question_category.form', $data);
@@ -120,12 +127,16 @@ class QuestionsCategoryController extends Controller
      */
     public function update(Request $request, Questions_category $questions_category, Api $api)
     {
-        $questions_categories = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions_categories'), $questions_category->id);
-        if (isset($questions_categories->error) && $questions_categories->error == 'Failed to Validate') {
-            return redirect('questions_categories/' . $questions_category->id . '/edit')->withErrors($questions_categories->data)->withInput();
+        $validate = $this->validation('update', $request);
+        if ($validate->fails()) {
+            return redirect('questions_categories/' . $questions_category->id . '/edit')->withErrors($validate)->withInput();
         }
 
-        $result = $questions_categories->success;
+        $data = [
+            'name'          => $request->input('name'),
+        ];
+
+        $result = Questions_category::where('id', $questions_category->id)->update($data);
         if ($result == true) {
             return redirect('questions_categories')->with('notif-y', 'sukses');
         } else {
@@ -141,13 +152,37 @@ class QuestionsCategoryController extends Controller
      */
     public function destroy(Questions_category $questions_category, Api $api, Request $request)
     {
-        $questions_categories = $api->sendPost($request->input(), url('api/' . date('d_m_Y_', time()) . 'questions_categories'), $questions_category->id);
+        $result = $questions_category::destroy($questions_category->id);
 
-        $result = $questions_categories->success;
         if ($result == true) {
             return redirect('questions_categories')->with('notif-y', 'sukses');
         } else {
             return redirect('questions_categories')->with('notif-x', 'error');
         }
+    }
+
+    public function validation($type = false, $request)
+    {
+        switch ($type) {
+            case 'login':
+                break;
+
+            case 'update':
+                $validation = validator($request->all(), [
+                    'name'                  => ['required', 'string', 'min:5', 'max:50'],
+                ]);
+                break;
+
+            case 'update-img':
+                break;
+
+            default:
+                $validation = validator($request->all(), [
+                    'name'                  => ['required', 'string', 'min:5', 'max:50', 'unique:questions_categories,name'],
+                ]);
+                break;
+        }
+
+        return $validation;
     }
 }

@@ -103,7 +103,7 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th class="text-capitalize text-xxs text-start">user</th>
+                        <th class="text-capitalize text-xxs text-start">unsur</th>
                         <th class="text-capitalize text-xxs text-start">pertanyaan</th>
                         <th class="text-capitalize text-xxs text-center">nilai/jawaban</th>
                         <th class="text-capitalize text-xxs text-center">tanggal pengisian</th>
@@ -114,7 +114,7 @@
 
                       @foreach ($report->data as $item)
                       <tr class="fw-bolder">
-                        <td class="text-lowercase px-4">{{ $item->users_email }}</td>
+                        <td class="text-lowercase px-4">{{ $item->units_name }}</td>
                         <td class="text-capitalize px-4">{{ $item->questions_name }}</td>
                         <td class="text-capitalize px-4 text-center">{{ $item->result }}</td>
                         <td class="text-capitalize px-4 text-center">{{ date('d M Y, h:i:s', strtotime($item->created_at)) }}</td>
@@ -144,7 +144,7 @@
                                 </div>
                               </div>
                             </a>
-                            <button form="delete-{{ $item->id }}" onclick="return confirm('Apakah benar Anda ingin menghapus Admin {{ $item->user_id }} ?')" class="btn shadow-none fw-bold px-3 py-0">
+                            <button form="delete-{{ $item->id }}" onclick="return confirm('Apakah benar Anda ingin menghapus Laporan {{ $item->id }} ?')" class="btn shadow-none fw-bold px-3 py-0">
                               <form action="{{ url('reports/'.$item->id) }}" method="post" enctype="multipart/form-data" class="d-inline" id="delete-{{ $item->id }}">
                                 @method('delete')
                                 @csrf

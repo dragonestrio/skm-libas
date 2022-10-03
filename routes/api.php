@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\QuestionsCategoryController;
 use App\Http\Controllers\API\ReportController;
+use App\Http\Controllers\API\RespondentController;
 use App\Http\Controllers\API\UnitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,34 +31,44 @@ use Illuminate\Support\Facades\Route;
 // personal_access_tokens
 // 
 
+// responden
+// Route::get('respondents', [RespondentController::class, 'index']);
+// Route::get('respondents/{respondent}', [RespondentController::class, 'show']);
+// Route::post('respondents', [RespondentController::class, 'store']);
+// Route::put('respondents/{respondent}', [RespondentController::class, 'update']);
+// Route::delete('respondents/{respondent}', [RespondentController::class, 'destroy']);
+// 
+
 // unit fokus
-Route::get(date('d_m_Y_', time()) . 'units', [UnitController::class, 'index']);
-Route::get(date('d_m_Y_', time()) . 'units/{unit}', [UnitController::class, 'show']);
-Route::post(date('d_m_Y_', time()) . 'units', [UnitController::class, 'store']);
-Route::put(date('d_m_Y_', time()) . 'units/{unit}', [UnitController::class, 'update']);
-Route::delete(date('d_m_Y_', time()) . 'units/{unit}', [UnitController::class, 'destroy']);
+Route::get('units', [UnitController::class, 'index']);
+// Route::get('units/{unit}', [UnitController::class, 'show']);
+// Route::post('units', [UnitController::class, 'store']);
+// Route::put('units/{unit}', [UnitController::class, 'update']);
+// Route::delete('units/{unit}', [UnitController::class, 'destroy']);
 // 
 
 // kategori pertanyaan
-Route::get(date('d_m_Y_', time()) . 'questions_categories', [QuestionsCategoryController::class, 'index']);
-Route::get(date('d_m_Y_', time()) . 'questions_categories/{questions_category}', [QuestionsCategoryController::class, 'show']);
-Route::post(date('d_m_Y_', time()) . 'questions_categories', [QuestionsCategoryController::class, 'store']);
-Route::put(date('d_m_Y_', time()) . 'questions_categories/{questions_category}', [QuestionsCategoryController::class, 'update']);
-Route::delete(date('d_m_Y_', time()) . 'questions_categories/{questions_category}', [QuestionsCategoryController::class, 'destroy']);
+// Route::get('questions_categories', [QuestionsCategoryController::class, 'index']);
+// Route::get('questions_categories/{questions_category}', [QuestionsCategoryController::class, 'show']);
+// Route::post('questions_categories', [QuestionsCategoryController::class, 'store']);
+// Route::put('questions_categories/{questions_category}', [QuestionsCategoryController::class, 'update']);
+// Route::delete('questions_categories/{questions_category}', [QuestionsCategoryController::class, 'destroy']);
 // 
 
 // pertanyaan
-Route::get(date('d_m_Y_', time()) . 'questions', [QuestionController::class, 'index']);
-Route::get(date('d_m_Y_', time()) . 'questions/{question}', [QuestionController::class, 'show']);
-Route::post(date('d_m_Y_', time()) . 'questions', [QuestionController::class, 'store']);
-Route::put(date('d_m_Y_', time()) . 'questions/{question}', [QuestionController::class, 'update']);
-Route::delete(date('d_m_Y_', time()) . 'questions/{question}', [QuestionController::class, 'destroy']);
+Route::get('questions', [QuestionController::class, 'index']);
+// Route::get('questions/{question}', [QuestionController::class, 'show']);
+// Route::post('questions', [QuestionController::class, 'store']);
+// Route::put('questions/{question}', [QuestionController::class, 'update']);
+// Route::delete('questions/{question}', [QuestionController::class, 'destroy']);
 // 
 
 // laporan kuesioner
-Route::get(date('d_m_Y_', time()) . 'reports', [ReportController::class, 'index']);
-Route::get(date('d_m_Y_', time()) . 'reports/{report}', [ReportController::class, 'show']);
-Route::post(date('d_m_Y_', time()) . 'reports', [ReportController::class, 'store']);
-Route::put(date('d_m_Y_', time()) . 'reports/{report}', [ReportController::class, 'update']);
-Route::delete(date('d_m_Y_', time()) . 'reports/{report}', [ReportController::class, 'destroy']);
+// Route::get('reports', [ReportController::class, 'index']);
+Route::get('reports', [ReportController::class, 'report']);
+Route::get('reports/{unit}', [ReportController::class, 'report']);
+Route::get('reports/{unit}/{date}', [ReportController::class, 'report']);
+Route::post('reports', [ReportController::class, 'store']);
+// Route::put('reports/{report}', [ReportController::class, 'update']);
+// Route::delete('reports/{report}', [ReportController::class, 'destroy']);
 // 
