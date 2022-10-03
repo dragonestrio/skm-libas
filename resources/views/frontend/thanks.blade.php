@@ -6,13 +6,18 @@
     <div class="thanks">
         <img src="{{ asset('assets/images/thanks.png') }}" alt="Terimakasih">
         <div class="btn-back">
-            <button class="btn-back-survey" role="button">Kembali Isi Survey</button>
+            <a class="link" href="/">
+                <button class="btn-back-survey" role="button">Kembali Isi Survey</button>
+            </a>
         </div>
     </div>
 
 </section>
 
 <style>
+.link {
+    text-decoration: none
+}
 .thanks {
     padding: 4.5rem 0;
     text-align: center;
@@ -72,4 +77,4 @@
 
 </style>
 
-@endsection 
+@endsection

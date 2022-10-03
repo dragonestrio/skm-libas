@@ -1228,7 +1228,7 @@
   </div>
   <div class="d-flex justify-content-between">
       <div class="btn-prev">
-        <a href="index.html">
+        <a href="/">
             <button class="learn-more">
                 <span class="circle" aria-hidden="true">
                     <span class="icon arrow"></span>
@@ -1237,7 +1237,7 @@
             </button>
         </a>
     </div>
-    <div>
+    {{-- <div>
       <div class="btn-next">
         <button onclick="sendData()" id="myBtn" class="learn-more">
             <span class="circle" aria-hidden="true">
@@ -1246,7 +1246,7 @@
             <span class="button-text">Finish</span>
         </button>
       </div>
-    </div>
+    </div> --}}
   </div>
 </section>
 <script>
@@ -1285,6 +1285,8 @@
         if (!isLastPage) {
             currentQuestion++
             getlistExam()
+        } else {
+            sendData()
         }
     }
 
