@@ -110,6 +110,8 @@
       bottom: 0;
       right: 0;
       margin: 2rem;
+
+
   }
   .btn-next-prev button.learn-more .circle {
       transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
@@ -350,15 +352,6 @@
   const gender = (value) => {
     data.gender = value
   }
-
-  
-  const getalldata = () => {
-    console.log(data)
-
-    localStorage.setItem("data", JSON.stringify(data))
-    window.location.href = '/exams';
-  }
-
 
   const education = (value) => {
     data.education = value
