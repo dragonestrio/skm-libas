@@ -34,6 +34,14 @@ crossorigin="anonymous"
   </div>
   <div class="row justify-content-center">
       <div class="col-12 col-md-6 table-responsive">
+        <div class="mx-sm-3 mx-lg-4 mb-2">
+            <select class="form-select" aria-label="Default select example">
+                <option selected>Open this select menu</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+          </div>
           <table class="table table-striped">
               <thead>
                   <tr>
@@ -102,9 +110,9 @@ crossorigin="anonymous"
           <form >
             <div class="row form-group d-flex justify-content-end mb-3">
                 <label for="date" class="col-sm-2 col-lg-1 col-form-label">Tanggal</label>
-                <div class="col-sm-5 mx-sm-3 mx-lg-4">
+                <div class="col-sm-5 col-lg-4 mx-sm-3 mx-lg-4">
                     <div class="input-group date" id="datepicker">
-                        <input onchange="getDate()" type="text" class="form-control" />
+                        <input onchange="getDate()" type="text" class="form-control text-center" />
                         <span class="input-group-append">
                             <span class="input-group-text bg-white d-block">
                                 <i class="fa fa-calendar"></i>
@@ -139,6 +147,19 @@ crossorigin="anonymous"
 body {
       font-family: "Quicksand", sans-serif;
   }
+
+  .select {
+    padding: 9px;
+    /* margin-top: 10rem; */
+    border: none;
+    background: #545c62;
+    color: white;
+    border-radius: 7px;
+}
+
+.form-select {
+    width: auto;
+}
 </style>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"
