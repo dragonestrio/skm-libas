@@ -65,10 +65,10 @@ Route::get('questions', [QuestionController::class, 'index']);
 
 // laporan kuesioner
 // Route::get('reports', [ReportController::class, 'index']);
-Route::get('reports', [ReportController::class, 'report']);
-Route::get('reports/{unit}', [ReportController::class, 'report']);
-Route::get('reports/{unit}/{date}', [ReportController::class, 'report']);
-Route::post('reports', [ReportController::class, 'store']);
+Route::get('respondent', [ReportController::class, 'report']);
+Route::get('respondent/{unit}', [ReportController::class, 'report']);
+Route::get('respondent/{unit}/{date}', [ReportController::class, 'report']);
+Route::post('respondent', [ReportController::class, 'store']);
 // Route::put('reports/{report}', [ReportController::class, 'update']);
 // Route::delete('reports/{report}', [ReportController::class, 'destroy']);
 // 

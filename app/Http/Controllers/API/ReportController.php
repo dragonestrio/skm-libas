@@ -42,14 +42,18 @@ class ReportController extends Controller
     //         $data = $reports->paginate(8);
     //     }
 
+
+    // $cache_name = 'reportCache';
+    // $cache = cache($cache_name);
+    // Cache::put($cache_name, $data, now()->addMinutes(strtotime('5 minutes')));
     //     return $api->responseSuccess('Quesioner Report', $data);
     // }
 
     public function report(Request $request, Api $api, Unit $unit, $date = null)
     {
-
         if ($date == null) {
             $date = date('m-Y', time());
+            $date_query = $date;
         } else {
             $dates = explode('-', $date);
             if (strlen($dates[0]) > 2) {
@@ -110,6 +114,9 @@ class ReportController extends Controller
         $data['total_rata_rata'] = round(($total_mean / $count_mean), 2);
         $data['total_nilai'] = $total_mean;
         $data['selected_date'] = $date;
+        $cache_name = 'reportCache';
+        $cache = cache($cache_name);
+        Cache::put($cache_name, $data, now()->addMinutes(strtotime('5 minutes')));
 
         if (count($request->input()) == 0) {
             $data = $data;
@@ -141,6 +148,9 @@ class ReportController extends Controller
     //     }
 
     //     $data = $reports->first();
+    // $cache_name = 'reportCache';
+    // $cache = cache($cache_name);
+    // Cache::put($cache_name, $data, now()->addMinutes(strtotime('5 minutes')));
     //     return $api->responseSuccess('Quesioner Report', $data);
     // }
 

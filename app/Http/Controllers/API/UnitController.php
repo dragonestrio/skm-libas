@@ -30,6 +30,9 @@ class UnitController extends Controller
             $data = $units->paginate(8);
         }
 
+        $cache_name = 'unitCache';
+        $cache = cache($cache_name);
+        Cache::put($cache_name, $data, now()->addMinutes(strtotime('1 minutes')));
         return $api->responseSuccess('Unit', $data);
     }
 
@@ -44,6 +47,9 @@ class UnitController extends Controller
         }
 
         $data = $units->first();
+        $cache_name = 'unitCache';
+        $cache = cache($cache_name);
+        Cache::put($cache_name, $data, now()->addMinutes(strtotime('1 minutes')));
         return $api->responseSuccess('Unit', $data);
     }
 
