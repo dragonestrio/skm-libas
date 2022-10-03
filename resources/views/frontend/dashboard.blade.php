@@ -109,7 +109,7 @@ crossorigin="anonymous"
                 <label for="date" class="col-sm-2 col-lg-1 col-form-label">Tanggal</label>
                 <div class="col-sm-5 col-lg-4 mx-sm-3 mx-lg-4">
                     <div class="input-group date" id="datepicker">
-                        <input onchange="getDate()" type="text" class="form-control text-center" />
+                        <input onchange="getDateValue()" id="date" type="text" class="form-control" />
                         <span class="input-group-append">
                             <span class="input-group-text bg-white d-block">
                                 <i class="fa fa-calendar"></i>
