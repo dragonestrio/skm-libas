@@ -34,13 +34,9 @@ crossorigin="anonymous"
   </div>
   <div class="row justify-content-center">
       <div class="col-12 col-md-6 table-responsive">
-        <div class="mx-sm-3 mx-lg-4 mb-2">
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
+          <div class="mx-sm-3 mx-lg-4 mb-2" id="select-option">
+            <select class="form-select" aria-label="Default select example" id="select"></select>
+            </select>
           </div>
           <table class="table table-striped">
               <thead>
@@ -170,6 +166,7 @@ body {
             const title = document.querySelector('#title')
             const datatable = document.querySelector('#total_survey')
             const ListchartName = document.querySelector('#ikm-mei-chart')
+            const ListUnits = document.querySelector('#select')
             const currentMonth = new Date().getMonth() + 1
             const currentYear = new Date().getFullYear()
             let filterDate = `${currentMonth}-${currentYear}`
@@ -181,7 +178,7 @@ body {
                 startView: "months",
                 minViewMode: "months"
               });
-          });
+            });
 
             const getlist = () => {
                 let link = `https://admin.skm.pcctabessmg.xyz/api/respondent/result/1/${filterDate}`
@@ -189,6 +186,7 @@ body {
                 .then((response) => {
                     return response.json();
                 }).then((responseJson) => {
+                    getunit()
                     showListTitle(responseJson.data.selected_date);
                     getGraphic(responseJson.data.list_cart_name, responseJson.data.list_cart_value)
                     showListTable(responseJson.data.respondents);
@@ -196,6 +194,31 @@ body {
                     console.error(err);
                 });
             }
+
+            const getunit = () => {
+                const linkUnits = `https://admin.skm.pcctabessmg.xyz/api/unit`
+                fetch((linkUnits))
+                .then((response) => {
+                    return response.json();
+                }).then((responseJson) => {
+                    showSelectOption(responseJson.data)
+                }).catch((err) => {
+                    console.error(err);
+                });
+            }
+
+
+            const showSelectOption = SelectOption => {
+                let sel = document.querySelector('#select');
+                SelectOption.forEach((unit)=>{
+                let opt = document.createElement('option');
+                opt.value=unit.id;
+                let name=document.createTextNode(unit.name);
+                opt.appendChild(name);
+                sel.appendChild(opt);
+                });
+            }
+  
 
             const showListTitle = Calendar => {
                 title.innerHTML = "";
@@ -261,6 +284,9 @@ body {
                 getlist()
             }
 
-            document.addEventListener('DOMContentLoaded', getlist);
+            document.addEventListener("DOMContentLoaded", () => {
+                getlist()
+                    
+            });
         </script>
 @endsection
