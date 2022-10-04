@@ -6,6 +6,7 @@ use App\Http\Requests\StoreReportRequest;
 use App\Http\Requests\UpdateReportRequest;
 use App\Models\Questions_category;
 use App\Models\Report;
+use App\Models\Unit;
 use App\Models\Users;
 use Illuminate\Http\Request;
 
@@ -18,6 +19,10 @@ class ReportController extends Controller
      */
     public function index(Request $request, Api $api, Questions_category $questions_category, $date = null)
     {
+        if ($request->input('unit') != null & $request->input('date') != null) {
+            return redirect('reports/' . $request->input('unit') . '/' . $request->input('date'));
+        }
+
         if ($questions_category->id == null) {
             $reports = $api->sendGet($request->input(), url('api/' . 'respondent' . '/1/' . date('m-Y', time())), null);
         } else {
@@ -66,8 +71,11 @@ class ReportController extends Controller
             'description'               => '',
             'state'                     => 'read',
             'position'                  => 'laporan kuesioner',
+            'unit'                      => Unit::get(),
             'report'                    => $reports->data,
             'report_graphic'            => $report_graphic,
+            'unit_current'              => $questions_category->id,
+            'date_current'              => $date,
         ];
 
         return view('report.report', $data);

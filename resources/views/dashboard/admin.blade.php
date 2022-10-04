@@ -67,17 +67,17 @@
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-      <div class="row text-light d-none d-lg-flex">
-        <div class="col-4 col-lg-4">
-          <p class="p-0 m-0 text-capitalize fw-bolder">filter unit</p>
+      <div class="row text-light">
+        <div class="col-6 col-lg-6">
+          <p class="p-0 m-0 text-capitalize fw-bolder text-start">filter unit</p>
         </div>
-        <div class="col-4 col-lg-4">
-          <p class="p-0 m-0 text-capitalize fw-bolder">berdasarkan</p>
+        <div class="col-6 col-lg-6">
+          <p class="p-0 m-0 text-capitalize fw-bolder text-end">berdasarkan</p>
         </div>
       </div>
       <form action="" method="get" class="pb-5">
         <div class="input-group">
-          <select name="unit" class="form-control text-center border border-2 border-top-0 border-bottom-0 border-start-0 border-success">
+          <select name="unit" onchange="change_unit()" class="form-control text-center border border-2 border-top-0 border-bottom-0 border-start-0 border-dark">
             @if (request()->input('unit') != null)
               @foreach ($unit as $item)
                 @if ($item->id == request()->input('unit'))
@@ -89,7 +89,7 @@
                 <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
             @endforeach
           </select>
-          <select name="date" class="form-control text-center border border-2 border-top-0 border-bottom-0 border-start-0 border-success">
+          <select name="date" onchange="change_date()" class="form-control text-center rounded-end">
             @if (request()->input('date') != null)
               @switch(request()->input('date'))
                   @case('time')
@@ -113,7 +113,8 @@
             <option value="month">{{ ucwords('bulan') }}</option>
             <option value="year">{{ ucwords('tahun') }}</option>
           </select>
-          <button class="form-control btn btn-success text-capitalize text-center fw-bolder mb-0">muat</button>
+          <input type="submit" id="submit" class="d-none">
+          {{-- <button class="form-control btn btn-success text-capitalize text-center fw-bolder mb-0">muat</button> --}}
         </div>
       </form>
       <div class="row">

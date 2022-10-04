@@ -6,9 +6,32 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <h3 class="text-center text-capitalize w-100 my-4" style="font-weight: 700;">
-                    Survei Kepuasan Masyarakat Satuan Lalulintas Polrestabes Semarang {{ $report->selected_date }}
-                </h3>
+                <a href="{{ url('reports') }}" class="text-decoration-none text-dark">
+                    <h3 class="text-center text-capitalize w-100 my-4" style="font-weight: 700;">
+                        Survei Kepuasan Masyarakat Satuan Lalulintas Polrestabes Semarang {{ $report->selected_date }}
+                    </h3>
+                </a>
+                <div class="container">
+                    <form action="" method="get">
+                        <div class="d-flex">
+                            <select name="unit" class="form-control text-center justify-content-start" onchange="change_unit()">
+                                @if ($unit_current != null)
+                                    @foreach ($unit as $item)
+                                        @if ($item->id == $unit_current)
+                                        <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
+                                        @endif
+                                    @endforeach
+                                @endif
+                                @foreach ($unit as $item)
+                                <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
+                                @endforeach
+                            </select>
+                            <input type="month" name="date" class="form-control justify-content-end" onchange="change_date()" 
+                            min="2000-01" value="{{ ($date_current == null) ?'': $date_current }}">
+                            <input type="submit" id="submit" value="cari" class="d-none">
+                        </div>
+                    </form>
+                </div>
                 <hr class="mb-5 w-100">
             </div>
         </div>
