@@ -195,6 +195,7 @@ class HomeController extends Controller
                     ->join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
                     ->join('units', 'units.id', 'respondents.unit_id')
                     ->latest('questions.questions_categorie_id')
+                    ->wherenull('reports.deleted_at')
                     ->where('units.id', request()->input('unit'))
                     ->where('reports.created_at', 'like', '%' . $filter . '%');
 
@@ -203,6 +204,7 @@ class HomeController extends Controller
                     ->join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
                     ->join('units', 'units.id', 'respondents.unit_id')
                     ->latest('questions.questions_categorie_id')
+                    ->wherenull('reports.deleted_at')
                     ->where('units.id', request()->input('unit'))
                     ->where('reports.created_at', 'like', '%' . $filter_before . '%');
 
@@ -233,6 +235,7 @@ class HomeController extends Controller
                         ->join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
                         ->join('units', 'units.id', 'respondents.unit_id')
                         ->latest('questions.questions_categorie_id')
+                        ->wherenull('reports.deleted_at')
                         ->where('units.id', request()->input('unit'));
 
                     switch ($ic) {
@@ -257,6 +260,7 @@ class HomeController extends Controller
                 ->join('questions', 'questions.id', 'reports.question_id')
                 ->join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
                 ->join('units', 'units.id', 'respondents.unit_id')
+                ->wherenull('reports.deleted_at')
                 ->where('units.id', request()->input('unit'))
                 ->where('reports.created_at', 'like', '%' . $filter . '%')
                 ->select('respondents.education')->groupBy('respondents.education')->get();
@@ -266,6 +270,7 @@ class HomeController extends Controller
                     ->join('questions', 'questions.id', 'reports.question_id')
                     ->join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
                     ->join('units', 'units.id', 'respondents.unit_id')
+                    ->wherenull('reports.deleted_at')
                     ->where('units.id', request()->input('unit'))
                     ->where('reports.created_at', 'like', '%' . $filter . '%');
 
@@ -280,7 +285,8 @@ class HomeController extends Controller
                     ->join('questions', 'questions.id', 'reports.question_id')
                     ->join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
                     ->join('units', 'units.id', 'respondents.unit_id')
-                    ->latest('questions.questions_categorie_id');
+                    ->latest('questions.questions_categorie_id')
+                    ->wherenull('reports.deleted_at');
 
                 switch ($ib) {
                     case 0:
@@ -318,13 +324,15 @@ class HomeController extends Controller
                 ->join('questions', 'questions.id', 'reports.question_id')
                 ->join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
                 ->join('units', 'units.id', 'respondents.unit_id')
-                ->select('respondents.education')->groupBy('respondents.education')->get();
+                ->select('respondents.education')->groupBy('respondents.education')
+                ->wherenull('reports.deleted_at')->get();
 
             foreach ($education as $key => $value) {
                 $education_report = Report::join('respondents', 'respondents.id', 'reports.respondent_id')
                     ->join('questions', 'questions.id', 'reports.question_id')
                     ->join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
-                    ->join('units', 'units.id', 'respondents.unit_id');
+                    ->join('units', 'units.id', 'respondents.unit_id')
+                    ->wherenull('reports.deleted_at');
 
                 array_push($graphic_report['education']['label'], $value->education);
                 array_push($graphic_report['education']['data'], $education_report->where('respondents.education', $value->education)->count());

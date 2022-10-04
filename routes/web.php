@@ -71,8 +71,8 @@ Route::get('questions/{question}', [QuestionController::class, 'show']);
 
 // laporan kuesioner
 Route::resource('reports', ReportController::class)->except('show', 'create', 'edit', 'update', 'destroy')->middleware('auth');
-Route::get('reports/{questions_category}', [ReportController::class, 'index']);
-Route::get('reports/{questions_category}/{date}', [ReportController::class, 'index']);
+Route::get('reports/{unit}', [ReportController::class, 'index']);
+Route::get('reports/{unit}/{date}', [ReportController::class, 'index']);
 // 
 
 // login history

@@ -81,6 +81,7 @@ class ReportController extends Controller
                 ->join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
                 ->join('units', 'units.id', 'respondents.unit_id')
                 ->latest('questions.questions_categorie_id')
+                ->wherenull('reports.deleted_at')
                 ->where('units.id', $unit->id)
                 ->where('reports.created_at', 'like', '%' . $date_query . '%');
 

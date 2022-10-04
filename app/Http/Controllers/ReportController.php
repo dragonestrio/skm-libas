@@ -17,19 +17,19 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, Api $api, Questions_category $questions_category, $date = null)
+    public function index(Request $request, Api $api, Unit $unit, $date = null)
     {
         if ($request->input('unit') != null & $request->input('date') != null) {
             return redirect('reports/' . $request->input('unit') . '/' . $request->input('date'));
         }
 
-        if ($questions_category->id == null) {
+        if ($unit->id == null) {
             $reports = $api->sendGet($request->input(), url('api/' . 'respondent' . '/1/' . date('m-Y', time())), null);
         } else {
             if ($date != null) {
-                $reports = $api->sendGet($request->input(), url('api/' . 'respondent/' . $questions_category->id . '/' . $date), null);
+                $reports = $api->sendGet($request->input(), url('api/' . 'respondent/' . $unit->id . '/' . $date), null);
             } else {
-                $reports = $api->sendGet($request->input(), url('api/' . 'respondent/' . $questions_category->id . '/' . date('m-Y', time())), null);
+                $reports = $api->sendGet($request->input(), url('api/' . 'respondent/' . $unit->id . '/' . date('m-Y', time())), null);
             }
         }
 
@@ -74,7 +74,7 @@ class ReportController extends Controller
             'unit'                      => Unit::get(),
             'report'                    => $reports->data,
             'report_graphic'            => $report_graphic,
-            'unit_current'              => $questions_category->id,
+            'unit_current'              => $unit->id,
             'date_current'              => $date,
         ];
 

@@ -66,62 +66,96 @@
       </div>
     </nav>
     <!-- End Navbar -->
-    <div class="container-fluid py-4">
-      <div class="row text-light">
-        <div class="col-6 col-lg-6">
-          <p class="p-0 m-0 text-capitalize fw-bolder text-start">filter unit</p>
+    <div class="container-fluid pb-4">
+      <div class="accordion-item">
+        <div class="accordion-header d-flex justify-content-end">
+          <button class="btn bg-transparent btn-outline-light text-capitalize text-light fw-bolder" type="button" data-bs-toggle="collapse" data-bs-target="#flush-one" aria-controls="flush-one" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+              <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+            </svg>
+            filters
+          </button>
         </div>
-        <div class="col-6 col-lg-6">
-          <p class="p-0 m-0 text-capitalize fw-bolder text-end">berdasarkan</p>
+        <div id="flush-one" class="accordion-collapse collapse">
+          <form action="" method="get" class="pb-5">
+            <div class="row text-light">
+
+              <div class="col-6 col-lg-4">
+                <div class="row">
+                  <div class="col-12 col-lg-12">
+                    <p class="p-0 m-0 text-capitalize fw-bolder">filter unit</p>
+                  </div>
+                  <div class="col-12 col-lg-12">
+                    <select name="unit" class="form-select text-center">
+                      @if (request()->input('unit') != null)
+                        @foreach ($unit as $item)
+                          @if ($item->id == request()->input('unit'))
+                            <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
+                          @endif
+                        @endforeach
+                      @endif
+                      @foreach ($unit as $item)
+                          <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 col-lg-4">
+                <div class="row">
+                  <div class="col-12 col-lg-12">
+                    <p class="p-0 m-0 text-capitalize fw-bolder">berdasarkan</p>
+                  </div>
+                  <div class="col-12 col-lg-12">
+                    <select name="date" class="form-select text-center">
+                      @if (request()->input('date') != null)
+                        @switch(request()->input('date'))
+                            @case('time')
+                                <option value="time">{{ ucwords('jam') }}</option>
+                                @break
+                            @case('day')
+                                <option value="day">{{ ucwords('hari') }}</option>
+                                @break
+                            @case('month')
+                                <option value="month">{{ ucwords('bulan') }}</option>
+                                @break
+                            @case('year')
+                                <option value="year">{{ ucwords('tahun') }}</option>
+                                @break
+                            @default
+                                
+                        @endswitch
+                      @endif
+                      <option value="time">{{ ucwords('jam') }}</option>
+                      <option value="day">{{ ucwords('hari') }}</option>
+                      <option value="month">{{ ucwords('bulan') }}</option>
+                      <option value="year">{{ ucwords('tahun') }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-4">
+                <div class="row">
+                  <div class="col-12 col-lg-12">
+                    <p class="p-0 m-0 text-capitalize fw-bolder">&nbsp;</p>
+                  </div>
+                  <div class="col-12 col-lg-12">
+                    <button class="form-control btn btn-success text-capitalize text-center fw-bolder mb-0">muat</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </form>
         </div>
       </div>
-      <form action="" method="get" class="pb-5">
-        <div class="input-group">
-          <select name="unit" onchange="change_unit()" class="form-control text-center border border-2 border-top-0 border-bottom-0 border-start-0 border-dark">
-            @if (request()->input('unit') != null)
-              @foreach ($unit as $item)
-                @if ($item->id == request()->input('unit'))
-                  <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
-                @endif
-              @endforeach
-            @endif
-            @foreach ($unit as $item)
-                <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
-            @endforeach
-          </select>
-          <select name="date" onchange="change_date()" class="form-control text-center rounded-end">
-            @if (request()->input('date') != null)
-              @switch(request()->input('date'))
-                  @case('time')
-                      <option value="time">{{ ucwords('jam') }}</option>
-                      @break
-                  @case('day')
-                      <option value="day">{{ ucwords('hari') }}</option>
-                      @break
-                  @case('month')
-                      <option value="month">{{ ucwords('bulan') }}</option>
-                      @break
-                  @case('year')
-                      <option value="year">{{ ucwords('tahun') }}</option>
-                      @break
-                  @default
-                      
-              @endswitch
-            @endif
-            <option value="time">{{ ucwords('jam') }}</option>
-            <option value="day">{{ ucwords('hari') }}</option>
-            <option value="month">{{ ucwords('bulan') }}</option>
-            <option value="year">{{ ucwords('tahun') }}</option>
-          </select>
-          <input type="submit" id="submit" class="d-none">
-          {{-- <button class="form-control btn btn-success text-capitalize text-center fw-bolder mb-0">muat</button> --}}
-        </div>
-      </form>
       <div class="row">
 
         @foreach ($report as $item)
         <div class="col-12 col-lg-4 mb-xl-0 mb-4">
-          <div class="card">
+          <div class="card shadow">
             <div class="card-body p-3">
               <div class="row">
                 <div class="col-8">
@@ -160,7 +194,8 @@
         @endforeach
 
       </div>
-      <div class="row mt-4">
+      <div class="row mt-4 mt-lg-5">
+
         <div class="col-12 col-lg-7 mb-lg-0 mb-4">
           <div class="card z-index-2 h-100">
             <div class="card-header pb-0 pt-3 bg-transparent">
@@ -183,6 +218,7 @@
             </div>
           </div>
         </div>
+        
         <div class="col-12 col-lg-5">
           <div class="card z-index-2 h-100">
             <div class="card-header pb-0 pt-3 bg-transparent">
