@@ -12,25 +12,37 @@
                     </h3>
                 </a>
                 <div class="container">
-                    <form action="" method="get">
-                        <div class="d-flex">
-                            <select name="unit" class="form-control text-center justify-content-start" onchange="change_unit()">
-                                @if ($unit_current != null)
-                                    @foreach ($unit as $item)
-                                        @if ($item->id == $unit_current)
-                                        <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
-                                        @endif
-                                    @endforeach
-                                @endif
-                                @foreach ($unit as $item)
-                                <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
-                                @endforeach
-                            </select>
-                            <input type="month" name="date" class="form-control justify-content-end" onchange="change_date()" 
-                            min="2000-01" value="{{ ($date_current == null) ?'': $date_current }}">
-                            <input type="submit" id="submit" value="cari" class="d-none">
+                    <div class="accordion-item">
+                        <div class="accordion-header d-flex justify-content-center">
+                          <button class="btn bg-transparent btn-outline-dark text-dark text-capitalize fw-bolder" type="button" data-bs-toggle="collapse" data-bs-target="#flush-one" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                              <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+                            </svg>
+                            filters
+                          </button>
                         </div>
-                    </form>
+                        <div id="flush-one" class="accordion-collapse collapse">
+                            <form action="" method="get">
+                                <div class="d-flex">
+                                    <select name="unit" class="form-control text-center justify-content-start" onchange="change_unit()">
+                                        @if ($unit_current != null)
+                                            @foreach ($unit as $item)
+                                                @if ($item->id == $unit_current)
+                                                <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                        @foreach ($unit as $item)
+                                        <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="month" name="date" class="form-control justify-content-end" onchange="change_date()" 
+                                    min="2000-01" value="{{ ($date_current == null) ?'': $date_current }}">
+                                    <input type="submit" id="submit" value="cari" class="d-none">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <hr class="mb-5 w-100">
             </div>

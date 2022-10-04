@@ -69,7 +69,7 @@
     <div class="container-fluid pb-4">
       <div class="accordion-item">
         <div class="accordion-header d-flex justify-content-end">
-          <button class="btn bg-transparent btn-outline-light text-capitalize text-light fw-bolder" type="button" data-bs-toggle="collapse" data-bs-target="#flush-one" aria-controls="flush-one" aria-expanded="false">
+          <button class="btn bg-transparent btn-outline-light text-capitalize text-light fw-bolder" type="button" data-bs-toggle="collapse" data-bs-target="#flush-one" aria-expanded="false">
             <svg xmlns="http://www.w3.org/2000/svg" height="20" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
               <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
             </svg>

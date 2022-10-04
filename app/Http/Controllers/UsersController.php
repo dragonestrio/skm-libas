@@ -89,10 +89,10 @@ class UsersController extends Controller
         if (filesize($profile_pic) == false) {
             $profile_pic = '';
         } else {
-            $count_file = count($profile_pic['name']);
-            if ($count_file > 1) {
-                return redirect('users/create')->with('notif-x', 'you just can upload 1 files')->withInput();
-            }
+            // $count_file = count($profile_pic['name']);
+            // if ($count_file > 1) {
+            //     return redirect('users/create')->with('notif-x', 'you just can upload 1 files')->withInput();
+            // }
             $profile_pic_name = time() . '_' . $profile_pic->hashName();
             $profile_pic->move(public_path('media/upload/profile/'), $profile_pic_name);
             $profile_pic = $profile_pic_name;
@@ -184,10 +184,10 @@ class UsersController extends Controller
         if (filesize($profile_pic) == false) {
             $profile_pic = $user->profile_pic;
         } else {
-            $count_file = count($profile_pic['name']);
-            if ($count_file > 1) {
-                return redirect('users/' . $user->id . '/edit')->with('notif-x', 'you just can upload 1 files')->withInput();
-            }
+            // $count_file = count($profile_pic['name']);
+            // if ($count_file > 1) {
+            //     return redirect('users/' . $user->id . '/edit')->with('notif-x', 'you just can upload 1 files')->withInput();
+            // }
             $profile_pic_name = time() . '_' . $profile_pic->hashName();
             $profile_pic->move(public_path('media/upload/profile/'), $profile_pic_name);
             $profile_pic = $profile_pic_name;
@@ -262,10 +262,10 @@ class UsersController extends Controller
         if (filesize($profile_pic) == false) {
             $profile_pic = $user->profile_pic;
         } else {
-            $count_file = count($profile_pic['name']);
-            if ($count_file > 1) {
-                return redirect('profile')->with('notif-x', 'you just can upload 1 files')->withInput();
-            }
+            // $count_file = count($profile_pic['name']);
+            // if ($count_file > 1) {
+            //     return redirect('profile')->with('notif-x', 'you just can upload 1 files')->withInput();
+            // }
             $profile_pic_name = time() . '_' . $profile_pic->hashName();
             $profile_pic->move(public_path('media/upload/profile/'), $profile_pic_name);
             $profile_pic = $profile_pic_name;
@@ -381,10 +381,10 @@ class UsersController extends Controller
         if (filesize($profile_pic) == false) {
             $profile_pic = '';
         } else {
-            $count_file = count($profile_pic['name']);
-            if ($count_file > 1) {
-                return redirect('register')->with('notif-x', 'you just can upload 1 files')->withInput();
-            }
+            // $count_file = count($profile_pic['name']);
+            // if ($count_file > 1) {
+            //     return redirect('register')->with('notif-x', 'you just can upload 1 files')->withInput();
+            // }
             $profile_pic_name = time() . '_' . $profile_pic->hashName();
             $profile_pic->move(public_path('media/upload/profile/'), $profile_pic_name);
             $profile_pic = $profile_pic_name;

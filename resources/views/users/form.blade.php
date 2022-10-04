@@ -235,7 +235,7 @@
                             <option value="superadmin">Superadmin</option>    
                             @endcan
                             <option value="admin">Admin</option>    
-                            <option value="user">User</option>    
+                            {{-- <option value="user">User</option>     --}}
                             </select>
                             @error('level')
                             <p class="p-0 m-0 text-danger text-input-failed">{{ $message }}</p>
