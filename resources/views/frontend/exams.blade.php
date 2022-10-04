@@ -369,6 +369,9 @@
 
 /* haha */
 
+.emoji--haha {
+    cursor: pointer;
+}
 .emoji--haha:after {
     content: "Cukup Puas";
 }
@@ -417,6 +420,12 @@
     border-radius: 50%;
 }
 
+
+/* yay */
+
+.emoji--yay {
+    cursor: pointer;
+}
 .emoji--yay:after {
     content: "Sangat Puas";
     -webkit-animation: yay-reverse 1s linear infinite;
@@ -482,6 +491,12 @@
     box-shadow: -25px 0 0 0 #000000, 25px 0 0 0 #000000, -35px -2px 30px 10px #d5234c, 35px -2px 30px 10px #d5234c;
 }
 
+/* wow */
+
+.emoji--wow {
+    cursor: pointer;
+}
+
 .emoji--wow:after {
     content: "Puas";
 }
@@ -536,6 +551,12 @@
     background: #000000;
     -webkit-animation: wow-mouth 3s linear infinite;
     animation: wow-mouth 3s linear infinite;
+}
+
+/* sad */
+
+.emoji--sad {
+    cursor: pointer;
 }
 
 .emoji--sad:after {
@@ -619,6 +640,11 @@
     box-shadow: -18px 0 0 0 #000000, 18px 0 0 0 #000000;
 }
 
+/* angry */
+
+.emoji--angry {
+    cursor: pointer;
+}
 .emoji--angry {
     background: linear-gradient(#d5234c -10%, #ffda6a);
     background-size: 100%;
@@ -1276,7 +1302,7 @@
     listExam.innerHTML = "";
         listExam.innerHTML += `
         <h4 class="mb-4">KATEGORI : ${Exams.category.name}</h4>
-        <h1 class="mb-4">${Exams.name}</h1>
+        <h1 class="mb-4 text-center">${Exams.name}</h1>
        `
       };
 

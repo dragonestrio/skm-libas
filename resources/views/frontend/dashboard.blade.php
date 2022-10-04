@@ -35,6 +35,7 @@ crossorigin="anonymous"
   <div class="row justify-content-center">
       <div class="col-12 col-md-6 table-responsive">
           <div class="mx-sm-3 mx-lg-4 mb-2" id="select-option">
+              <p>Unit Fokus</p>
             <select class="form-select" aria-label="Default select example" id="select"></select>
             </select>
           </div>
@@ -152,6 +153,12 @@ body {
     border-radius: 7px;
 }
 
+#select-option p {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
 .form-select {
     width: auto;
 }
@@ -224,7 +231,7 @@ body {
                 title.innerHTML = "";
                 title.innerHTML += `
                 <h3 class="text-center w-100 my-4" style="font-weight: 700">
-                    Survei Kepuasan Masyarakat Satuan Lalulintas Polrestabes Semarang ${Calendar}
+                    Survei Kepuasan Masyarakat Polrestabes Semarang ${Calendar}
                 </h3>
                 `
                 };
