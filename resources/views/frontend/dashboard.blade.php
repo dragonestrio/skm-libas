@@ -35,7 +35,8 @@ crossorigin="anonymous"
   <div class="row justify-content-center">
       <div class="col-12 col-md-6 table-responsive">
           <div class="mx-sm-3 mx-lg-4 mb-2" id="select-option">
-            <select class="form-select" aria-label="Default select example" id="select"></select>
+            <h3 id="unit"></h3>
+            <select class="form-select" aria-label="Default select example" id="select">
             </select>
           </div>
           <table class="table table-striped">
@@ -48,54 +49,6 @@ crossorigin="anonymous"
                   </tr>
               </thead>
               <tbody id="total_survey">
-                  {{-- <tr>
-                      <td>Kemudahan Prosedur Pelayanan</td>
-                      <td>3.59</td>
-                      <td>0.111</td>
-                      <td>0.4</td>
-                  </tr>
-                  <tr>
-                      <td>Kecepatan Pelayanan</td>
-                      <td>3.53</td>
-                      <td>0.111</td>
-                      <td>0.39</td>
-                  </tr>
-                  <tr>
-                      <td>Kewajaran Biaya/Tariff</td>
-                      <td>3.06</td>
-                      <td>0.111</td>
-                      <td>0.34</td>
-                  </tr>
-                  <tr>
-                      <td>Kesesuaian Standar Pelayanan</td>
-                      <td>3.66</td>
-                      <td>0.111</td>
-                      <td>0.41</td>
-                  </tr>
-                  <tr>
-                      <td>Kompetensi/Kemampuan Petugas</td>
-                      <td>3.66</td>
-                      <td>0.111</td>
-                      <td>0.41</td>
-                  </tr>
-                  <tr>
-                      <td>Kesopanan dan Keramahan Petugas</td>
-                      <td>3.91</td>
-                      <td>0.111</td>
-                      <td>0.43</td>
-                  </tr>
-                  <tr>
-                      <td>Kualitas Sarana dan Prasarana</td>
-                      <td>3.78</td>
-                      <td>0.111</td>
-                      <td>0.42</td>
-                  </tr>
-                  <tr>
-                      <td>Penanganan Pengaduan untuk Pengguna Pelayanan</td>
-                      <td>3.84</td>
-                      <td>0.111</td>
-                      <td>0.43</td>
-                  </tr> --}}
               </tbody>
           </table>
       </div>
@@ -164,13 +117,16 @@ body {
         ></script>
         <script>
             const title = document.querySelector('#title')
+
             const datatable = document.querySelector('#total_survey')
             const ListchartName = document.querySelector('#ikm-mei-chart')
             const ListUnits = document.querySelector('#select')
             const currentMonth = new Date().getMonth() + 1
             const currentYear = new Date().getFullYear()
             let filterDate = `${currentMonth}-${currentYear}`
+            let units = []
             let unitId = 1
+            let unitText = ''
 
             $(function () {
               $("#datepicker").datepicker({
@@ -181,12 +137,11 @@ body {
             });
 
             const getlist = () => {
-                let link = `https://admin.skm.pcctabessmg.xyz/api/respondent/result/1/${filterDate}`
+                let link = `https://admin.skm.pcctabessmg.xyz/api/respondent/result/${unitId}/${filterDate}`
                 fetch((link))
                 .then((response) => {
                     return response.json();
                 }).then((responseJson) => {
-                    getunit()
                     showListTitle(responseJson.data.selected_date);
                     getGraphic(responseJson.data.list_cart_name, responseJson.data.list_cart_value)
                     showListTable(responseJson.data.respondents);
@@ -201,24 +156,21 @@ body {
                 .then((response) => {
                     return response.json();
                 }).then((responseJson) => {
+                    units = responseJson.data
+                    showUnitTitle(units[0].name)
                     showSelectOption(responseJson.data)
                 }).catch((err) => {
                     console.error(err);
                 });
             }
 
-
             const showSelectOption = SelectOption => {
-                let sel = document.querySelector('#select');
-                SelectOption.forEach((unit)=>{
-                let opt = document.createElement('option');
-                opt.value=unit.id;
-                let name=document.createTextNode(unit.name);
-                opt.appendChild(name);
-                sel.appendChild(opt);
-                });
+                SelectOption.forEach(function(key,index){
+                    $('#select').append(
+                        `<option value="${key.id}">${key.name}</option>`
+                    )
+                })
             }
-  
 
             const showListTitle = Calendar => {
                 title.innerHTML = "";
@@ -278,15 +230,27 @@ body {
 
             }
 
+            const showUnitTitle = item => {
+                const unit = document.querySelector('#unit')
+                unit.innerText = `Unit: ${item}`
+            };
+
+            // Filter data
+
             const getDateValue = (value) => {
                 filterDate = $("#date").val()
-
                 getlist()
             }
 
+             ListUnits.addEventListener('change', function handleChange(event) {
+                unitId = event.target.value
+                showUnitTitle(select.options[select.selectedIndex].text)
+                getlist()
+            });
+
             document.addEventListener("DOMContentLoaded", () => {
                 getlist()
-                    
+                getunit()
             });
         </script>
 @endsection
