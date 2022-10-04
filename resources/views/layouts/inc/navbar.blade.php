@@ -11,7 +11,7 @@
             <a class="link-logo" href="#">
               <img src="{{ url('assets/images/logo.png') }}" class="" href="https://restabessmg.jateng.polri.go.id/" alt="">
             </a>
-            <a class="link fw-bold" href="https://restabessmg.jateng.polri.go.id/">POLRESTABES SEMARANG</a>
+            <a class="link link-light fw-bold" href="/dashboard">POLRESTABES SEMARANG</a>
           </div>
           <div class="d-flex">
             <ul class="navbar-nav mb-lg-0 menu link ">

@@ -105,6 +105,12 @@ body {
     border-radius: 7px;
 }
 
+#select-option p {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
 .form-select {
     width: auto;
 }
@@ -176,7 +182,7 @@ body {
                 title.innerHTML = "";
                 title.innerHTML += `
                 <h3 class="text-center w-100 my-4" style="font-weight: 700">
-                    Survei Kepuasan Masyarakat Satuan Lalulintas Polrestabes Semarang ${Calendar}
+                    Survei Kepuasan Masyarakat Polrestabes Semarang ${Calendar}
                 </h3>
                 `
                 };
