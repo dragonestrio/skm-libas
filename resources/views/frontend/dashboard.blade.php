@@ -35,9 +35,9 @@ crossorigin="anonymous"
   <div class="row justify-content-center">
       <div class="col-12 col-md-6 table-responsive">
           <div class="mx-sm-3 mx-lg-4 mb-2" id="select-option">
-            <h3 id="unit"></h3>
-            <select class="form-select" aria-label="Default select example" id="select">
-            </select>
+                <p id="unit"></p>
+                <select class="form-select" aria-label="Default select example" id="select">
+                </select>
           </div>
           <table class="table table-striped">
               <thead>
@@ -98,7 +98,6 @@ body {
 
   .select {
     padding: 9px;
-    /* margin-top: 10rem; */
     border: none;
     background: #545c62;
     color: white;
@@ -108,7 +107,13 @@ body {
 #select-option p {
     font-size: 18px;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
+}
+
+#select-option {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 
 .form-select {
@@ -238,7 +243,7 @@ body {
 
             const showUnitTitle = item => {
                 const unit = document.querySelector('#unit')
-                unit.innerText = `Unit: ${item}`
+                unit.innerText = `Unit Fokus`
             };
 
             // Filter data
