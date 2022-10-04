@@ -129,15 +129,22 @@ body {
         <script>
             const title = document.querySelector('#title')
 
+
+            var month = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+
             const datatable = document.querySelector('#total_survey')
             const ListchartName = document.querySelector('#ikm-mei-chart')
             const ListUnits = document.querySelector('#select')
             const currentMonth = new Date().getMonth() + 1
             const currentYear = new Date().getFullYear()
+            let months = month[currentMonth -1]
             let filterDate = `${currentMonth}-${currentYear}`
             let units = []
             let unitId = 1
             let unitText = ''
+
+            console.log(month[currentMonth -1])
 
             $(function () {
               $("#datepicker").datepicker({
@@ -187,7 +194,7 @@ body {
                 title.innerHTML = "";
                 title.innerHTML += `
                 <h3 class="text-center w-100 my-4" style="font-weight: 700">
-                    Survei Kepuasan Masyarakat Polrestabes Semarang ${Calendar}
+                    Survei Kepuasan Masyarakat Polrestabes Semarang ${months} ${currentYear} 
                 </h3>
                 `
                 };
@@ -250,7 +257,9 @@ body {
 
             const getDateValue = (value) => {
                 filterDate = $("#date").val()
+                months = month[filterDate.slice(0, 2) -1]   
                 getlist()
+                showListTitle()
             }
 
              ListUnits.addEventListener('change', function handleChange(event) {
