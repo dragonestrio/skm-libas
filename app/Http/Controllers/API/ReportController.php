@@ -112,7 +112,7 @@ class ReportController extends Controller
         $data['units'] = $data_unit;
         $data['respondents'] = $data_respondent;
         $data['total_rata_rata'] = round(($total_mean / $count_mean), 2);
-        $data['total_nilai'] = $total_mean;
+        $data['total_nilai'] = round($total_mean, 2);
         $data['selected_date'] = $date;
         $cache_name = 'reportCache';
         $cache = cache($cache_name);

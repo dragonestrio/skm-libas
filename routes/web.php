@@ -46,34 +46,35 @@ Route::get('dashboard', [HomeController::class, 'dashboard'])->middleware('auth'
 // 
 
 // users
-Route::resource('users', UsersController::class)->middleware('superadmin');
+Route::resource('users', UsersController::class)->middleware('auth');
 //
 
 // responden
-Route::resource('respondents', RespondentController::class)->except('show')->middleware('superadmin');
+Route::resource('respondents', RespondentController::class)->except('show')->middleware('auth');
 Route::get('respondents/{respondent}', [RespondentController::class, 'show']);
 //
 
 // unit fokus
-Route::resource('units', UnitController::class)->except('show')->middleware('superadmin');
+Route::resource('units', UnitController::class)->except('show')->middleware('auth');
 Route::get('units/{unit}', [UnitController::class, 'show']);
 //
 
 // kategori pertanyaan
-Route::resource('questions_categories', QuestionsCategoryController::class)->except('show')->middleware('superadmin');
+Route::resource('questions_categories', QuestionsCategoryController::class)->except('show')->middleware('auth');
 Route::get('questions_categories/{questions_category}', [QuestionsCategoryController::class, 'show']);
 // 
 
 // pertanyaan
-Route::resource('questions', QuestionController::class)->except('show')->middleware('superadmin');
+Route::resource('questions', QuestionController::class)->except('show')->middleware('auth');
 Route::get('questions/{question}', [QuestionController::class, 'show']);
 // 
 
 // laporan kuesioner
-Route::resource('reports', ReportController::class)->except('show', 'create', 'edit', 'update', 'destroy')->middleware('superadmin');
+Route::resource('reports', ReportController::class)->except('show', 'create', 'edit', 'update', 'destroy')->middleware('auth');
 Route::get('reports/{questions_category}', [ReportController::class, 'index']);
+Route::get('reports/{questions_category}/{date}', [ReportController::class, 'index']);
 // 
 
 // login history
-// Route::resource('login_history', LoginHistoryController::class)->except('show', 'edit', 'update')->middleware('superadmin');
+// Route::resource('login_history', LoginHistoryController::class)->except('show', 'edit', 'update')->middleware('auth');
 //

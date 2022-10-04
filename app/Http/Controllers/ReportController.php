@@ -16,12 +16,16 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, Api $api, Questions_category $questions_category)
+    public function index(Request $request, Api $api, Questions_category $questions_category, $date = null)
     {
         if ($questions_category->id == null) {
-            $reports = $api->sendGet($request->input(), url('api/' . 'respondent'), null);
+            $reports = $api->sendGet($request->input(), url('api/' . 'respondent' . '/1/' . date('m-Y', time())), null);
         } else {
-            $reports = $api->sendGet($request->input(), url('api/' . 'respondent/' . $questions_category->id), null);
+            if ($date != null) {
+                $reports = $api->sendGet($request->input(), url('api/' . 'respondent/' . $questions_category->id . '/' . $date), null);
+            } else {
+                $reports = $api->sendGet($request->input(), url('api/' . 'respondent/' . $questions_category->id . '/' . date('m-Y', time())), null);
+            }
         }
 
         // dd($reports);
@@ -49,7 +53,11 @@ class ReportController extends Controller
         $report_graphic['data'] = $report_graphic_data;
         $report_graphic['bg_color'] = $report_graphic_bg_color;
 
-        // dd($report_graphic);
+        $reports_message = explode(' ', $reports->message);
+        $reports_date = explode('-', $reports_message[2]);
+        $reports_date = date('M Y', strtotime($reports_date[1] . '-' . $reports_date[0]));
+        $reports_message = $reports_message[0] . ' ' . $reports_message[1] . ' ' . $reports_date;
+        $reports->message = $reports_message;
 
         $data = [
             'title'                     => 'Laporan Kuesioner',
