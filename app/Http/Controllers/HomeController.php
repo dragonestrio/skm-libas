@@ -23,22 +23,61 @@ class HomeController extends Controller
             'state'         => 'read',
             'position'      => 'home',
         ];
-        return view('home-index', $data);
+        return view('frontend.dashboard', $data);
     }
 
-    public function register_index(Request $request)
+    public function survey()
     {
         $data = [
-            'title'         => 'Register',
+            'title'         => 'Home',
             'app'           => 'SKM LIBAS',
             'author'        => '',
             'description'   => '',
             'state'         => 'read',
-            'position'      => 'register',
+            'position'      => 'home',
         ];
-
-        return view('register', $data);
+        return view('frontend.index', $data);
     }
+
+    public function exam()
+    {
+        $data = [
+            'title'         => 'Home',
+            'app'           => 'SKM LIBAS',
+            'author'        => '',
+            'description'   => '',
+            'state'         => 'read',
+            'position'      => 'home',
+        ];
+        return view('frontend.exams', $data);
+    }
+
+    public function thank()
+    {
+        $data = [
+            'title'         => 'Home',
+            'app'           => 'SKM LIBAS',
+            'author'        => '',
+            'description'   => '',
+            'state'         => 'read',
+            'position'      => 'home',
+        ];
+        return view('frontend.thanks', $data);
+    }
+
+    // public function register_index(Request $request)
+    // {
+    //     $data = [
+    //         'title'         => 'Register',
+    //         'app'           => 'SKM LIBAS',
+    //         'author'        => '',
+    //         'description'   => '',
+    //         'state'         => 'read',
+    //         'position'      => 'register',
+    //     ];
+
+    //     return view('register', $data);
+    // }
 
     public function login_index(Request $request)
     {

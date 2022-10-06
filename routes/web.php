@@ -28,7 +28,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// frontend
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('guest');
+Route::get('survey', [HomeController::class, 'survey'])->name('survey')->middleware('guest');
+Route::get('exams', [HomeController::class, 'exam'])->name('exam')->middleware('guest');
+Route::get('thanks', [HomeController::class, 'thank'])->name('thank')->middleware('guest');
+// 
+
 Route::get('register', [HomeController::class, 'register_index'])->name('register')->middleware('guest');
 Route::get('login', [HomeController::class, 'login_index'])->name('login')->middleware('guest');
 Route::get('logout', [UsersController::class, 'logout'])->name('logout');

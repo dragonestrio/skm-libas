@@ -24,12 +24,12 @@ class ReportController extends Controller
         }
 
         if ($unit->id == null) {
-            $reports = $api->sendGet($request->input(), url('api/' . 'respondent' . '/1/' . date('m-Y', time())), null);
+            $reports = $api->sendGet($request->input(), url('api/' . 'respondent/result' . '/1/' . date('m-Y', time())), null);
         } else {
             if ($date != null) {
-                $reports = $api->sendGet($request->input(), url('api/' . 'respondent/' . $unit->id . '/' . $date), null);
+                $reports = $api->sendGet($request->input(), url('api/' . 'respondent/result/' . $unit->id . '/' . $date), null);
             } else {
-                $reports = $api->sendGet($request->input(), url('api/' . 'respondent/' . $unit->id . '/' . date('m-Y', time())), null);
+                $reports = $api->sendGet($request->input(), url('api/' . 'respondent/result/' . $unit->id . '/' . date('m-Y', time())), null);
             }
         }
 
@@ -49,7 +49,7 @@ class ReportController extends Controller
 
         foreach ($reports->data->respondents as $key => $value) {
             array_push($report_graphic_label, ucwords($value->questions_categorie->name));
-            array_push($report_graphic_data, ucwords($value->rata_rata));
+            array_push($report_graphic_data, ucwords($value->skm));
             $bg_color_pick = array_rand($bg_color_data);
             array_push($report_graphic_bg_color, $bg_color_data[$bg_color_pick]);
         }
@@ -114,7 +114,7 @@ class ReportController extends Controller
             'description'       => '',
             'state'             => 'create',
             'position'          => 'laporan kuesioner',
-            'respondent'        => $api->sendGet(null, url('api/' . 'respondents'), null)->data,
+            'respondent'        => $api->sendGet(null, url('api/' . 'respondents/result'), null)->data,
             'question'          => $api->sendGet(null, url('api/' . 'questions'), null)->data,
             'unit'              => $api->sendGet(null, url('api/' . 'units'), null)->data,
         ];
@@ -130,7 +130,7 @@ class ReportController extends Controller
      */
     public function store(Request $request, Api $api)
     {
-        $reports = $api->sendPost($request->input(), url('api/' . 'reports'), null);
+        $reports = $api->sendPost($request->input(), url('api/' . 'respondent/add'), null);
         if (isset($reports->error) && $reports->error == 'Failed to Validate') {
             return redirect('reports/create')->withErrors($reports->data)->withInput();
         }
@@ -161,27 +161,27 @@ class ReportController extends Controller
      * @param  \App\Models\Report  $report
      * @return \Illuminate\Http\Response
      */
-    public function edit(Report $report, Api $api, Request $request)
-    {
-        $reports = $api->sendGet($request->input(), url('api/' . 'reports'), $report->id);
-        $check_reports = count((array) $reports->data);
+    // public function edit(Report $report, Api $api, Request $request)
+    // {
+    //     $reports = $api->sendGet($request->input(), url('api/' . 'reports'), $report->id);
+    //     $check_reports = count((array) $reports->data);
 
-        $data = [
-            'title'                     => 'Perbarui Laporan Kuesioner',
-            'app'                       => 'SKM LIBAS',
-            'author'                    => '',
-            'description'               => '',
-            'state'                     => 'update',
-            'position'                  => 'laporan kuesioner',
-            'respondent'                => $api->sendGet(null, url('api/' . 'respondents'), null)->data,
-            'question'                  => $api->sendGet(null, url('api/' . 'questions'), null)->data,
-            'unit'                      => $api->sendGet(null, url('api/' . 'units'), null)->data,
-            'report_count'              => $check_reports,
-            'report'                    => $reports->data,
-        ];
+    //     $data = [
+    //         'title'                     => 'Perbarui Laporan Kuesioner',
+    //         'app'                       => 'SKM LIBAS',
+    //         'author'                    => '',
+    //         'description'               => '',
+    //         'state'                     => 'update',
+    //         'position'                  => 'laporan kuesioner',
+    //         'respondent'                => $api->sendGet(null, url('api/' . 'respondents'), null)->data,
+    //         'question'                  => $api->sendGet(null, url('api/' . 'questions'), null)->data,
+    //         'unit'                      => $api->sendGet(null, url('api/' . 'units'), null)->data,
+    //         'report_count'              => $check_reports,
+    //         'report'                    => $reports->data,
+    //     ];
 
-        return view('report.form', $data);
-    }
+    //     return view('report.form', $data);
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -190,20 +190,20 @@ class ReportController extends Controller
      * @param  \App\Models\Report  $report
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Report $report, Api $api)
-    {
-        $reports = $api->sendPost($request->input(), url('api/' . 'reports'), $report->id);
-        if (isset($reports->error) && $reports->error == 'Failed to Validate') {
-            return redirect('reports/' . $report->id . '/edit')->withErrors($reports->data)->withInput();
-        }
+    // public function update(Request $request, Report $report, Api $api)
+    // {
+    //     $reports = $api->sendPost($request->input(), url('api/' . 'reports'), $report->id);
+    //     if (isset($reports->error) && $reports->error == 'Failed to Validate') {
+    //         return redirect('reports/' . $report->id . '/edit')->withErrors($reports->data)->withInput();
+    //     }
 
-        $result = $reports->success;
-        if ($result == true) {
-            return redirect('reports')->with('notif-y', 'sukses');
-        } else {
-            return redirect('reports/' . $report->id . '/edit')->with('notif-x', 'error')->withInput();
-        };
-    }
+    //     $result = $reports->success;
+    //     if ($result == true) {
+    //         return redirect('reports')->with('notif-y', 'sukses');
+    //     } else {
+    //         return redirect('reports/' . $report->id . '/edit')->with('notif-x', 'error')->withInput();
+    //     };
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -211,15 +211,15 @@ class ReportController extends Controller
      * @param  \App\Models\Report  $report
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Report $report, Api $api, Request $request)
-    {
-        $reports = $api->sendPost($request->input(), url('api/' . 'reports'), $report->id);
+    // public function destroy(Report $report, Api $api, Request $request)
+    // {
+    //     $reports = $api->sendPost($request->input(), url('api/' . 'reports'), $report->id);
 
-        $result = $reports->success;
-        if ($result == true) {
-            return redirect('reports')->with('notif-y', 'sukses');
-        } else {
-            return redirect('reports')->with('notif-x', 'error');
-        }
-    }
+    //     $result = $reports->success;
+    //     if ($result == true) {
+    //         return redirect('reports')->with('notif-y', 'sukses');
+    //     } else {
+    //         return redirect('reports')->with('notif-x', 'error');
+    //     }
+    // }
 }

@@ -121,7 +121,7 @@ class RespondentController extends Controller
 
             case 'update':
                 $validation = validator($request->all(), [
-                    'unit_id'               => ['required', 'string', 'exists:units,id'],
+                    'unit_id'               => ['required', 'exists:units,id'],
                     'gender'                => ['required', 'alpha', 'min:1', 'max:1'],
                     'education'             => ['required', 'string', 'min:1'],
                 ]);
@@ -132,7 +132,7 @@ class RespondentController extends Controller
 
             default:
                 $validation = validator($request->all(), [
-                    'unit_id'               => ['required', 'string', 'exists:units,id'],
+                    'unit_id'               => ['required', 'exists:units,id'],
                     'gender'                => ['required', 'alpha', 'min:1', 'max:1'],
                     'education'             => ['required', 'string', 'min:1'],
                 ]);

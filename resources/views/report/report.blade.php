@@ -72,7 +72,7 @@
             </div>
             <div class="col-12 col-md-6">
                 <canvas class="w-100" id="ikm-mei-chart"></canvas>
-                <table class="table table-responsive table-bordered w-100 mt-4">
+                {{-- <table class="table table-responsive table-bordered w-100 mt-4">
                     <thead>
                         <tr>
                             <th class="text-center text-capitalize">Nilai</th>
@@ -82,12 +82,12 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="text-center text-capitalize">{{ $report->total_nilai }}</td>
+                            <td class="text-center text-capitalize">{{ $report->nilai }}</td>
                             <td class="text-center text-capitalize">A</td>
                             <td class="text-center text-capitalize">Sangat Baik</td>
                         </tr>
                     </tbody>
-                </table>
+                </table> --}}
             </div>
         </div>
     </div>

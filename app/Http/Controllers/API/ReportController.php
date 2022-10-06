@@ -10,6 +10,7 @@ use App\Models\Respondent;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -72,9 +73,8 @@ class ReportController extends Controller
         $question_category = Questions_category::get();
         $data = [];
         $data_respondent = [];
-        $data_unit = [];
+        $data_unit = $unit::where('id', $unit->id)->first();
 
-        array_push($data_unit, $unit::where('id', $unit->id)->get());
         foreach ($question_category as $key => $value) {
             $reports = Report::join('respondents', 'respondents.id', 'reports.respondent_id')
                 ->join('questions', 'questions.id', 'reports.question_id')
@@ -83,6 +83,7 @@ class ReportController extends Controller
                 ->latest('questions.questions_categorie_id')
                 ->wherenull('reports.deleted_at')
                 ->where('units.id', $unit->id)
+                ->where('questions.questions_categorie_id', $value->id)
                 ->where('reports.created_at', 'like', '%' . $date_query . '%');
 
 
@@ -104,16 +105,22 @@ class ReportController extends Controller
 
         $total_mean = 0;
         $count_mean = 0;
+        $list_cart_name = [];
+        $list_cart_value = [];
         foreach ($data_respondent as $key => $value) {
             $total_mean += $value['rata_rata'];
             $count_mean++;
+            array_push($list_cart_name, $value['questions_categorie']['name']);
+            array_push($list_cart_value, $value['skm']);
         }
 
         $total = $total_mean;
         $data['units'] = $data_unit;
         $data['respondents'] = $data_respondent;
-        $data['total_rata_rata'] = round(($total_mean / $count_mean), 2);
-        $data['total_nilai'] = round($total_mean, 2);
+        $data['list_cart_name'] = $list_cart_name;
+        $data['list_cart_value'] = $list_cart_value;
+        $data['rata_rata_skm'] = round(($total_mean / $count_mean), 2);
+        $data['nilai'] = round($total_mean, 2);
         $data['selected_date'] = $date;
         $cache_name = 'reportCache';
         $cache = cache($cache_name);
@@ -166,9 +173,9 @@ class ReportController extends Controller
         //     return $api->errorValidation($validate_reports);
         // }
 
-        $respondent_id = Respondent::latest()->first();
+        $respondent_id = DB::table('respondents')->orderBy('id', 'desc')->first();
         $respondent_id = $respondent_id->id + 1;
-        $answers = $request->input('answer');
+        $answers = $request->input('answers');
 
         $data_respondent = [
             'id'            => $respondent_id,
@@ -177,17 +184,17 @@ class ReportController extends Controller
             'education'     => $request->input('education'),
         ];
 
+        $result_respondent = Respondent::create($data_respondent);
         foreach ($answers as $key => $value) {
             $data_report = [
                 'respondent_id'             => $respondent_id,
-                'question_id'               => $value('question_id'),
-                'result'                    => $value('result'),
+                'question_id'               => $value['question_id'],
+                'result'                    => $value['answer'],
             ];
+            $result_report = Report::create($data_report);
         }
 
 
-        $result_respondent = Report::create($data_respondent);
-        $result_report = Report::create($data_report);
         if ($result_report == true) {
             return $api->responseSuccess('Success', null);
         } else {

@@ -15,7 +15,7 @@
                   <p class="mb-0">Masukkan email dan password untuk masuk</p>
                   @endif
                 </div>
-                <div class="card-body">
+                <div class="card-body bg-white">
                   <form action="{{ url('login') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">

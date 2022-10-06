@@ -14,7 +14,7 @@ class QuestionController extends Controller
     public function index(Request $request, Api $api)
     {
         $questions = Question::join('questions_categories', 'questions_categories.id', 'questions.questions_categorie_id')
-            ->latest('questions.created_at')
+            ->orderBy('questions.name', 'asc')
             ->select('questions.*', 'questions_categories.name as questions_categorie_name');
 
         if ($request->input('search')) {
@@ -26,7 +26,7 @@ class QuestionController extends Controller
         if (count($request->input()) == 0) {
             $data = $questions->get();
         } else {
-            $data = $questions->paginate(8);
+            $data = $questions->paginate(1);
         }
 
 
