@@ -228,7 +228,7 @@
   .btn-prev button:hover .circle .icon.arrow,
   .btn-next button:hover .circle .icon.arrow {
       background: #fff;
-      transform: translate(1rem, 0);
+      transform: translate(7rem, 0);
   }
   .btn-prev button:hover .button-text {
       color: #fff;

@@ -8,8 +8,8 @@
       <nav class="navbar navbar-skm ">
         <div class="container-fluid">
           <div class="logo gap-4">
-            <a class="link-logo" href="#">
-              <img src="{{ url('assets/images/logo.png') }}" class="" href="https://restabessmg.jateng.polri.go.id/" alt="">
+            <a class="link-logo" href="/dashboard">
+              <img src="{{ url('assets/images/logo.png') }}" class="" href="/dashboard" alt="">
             </a>
             <a class="link link-light fw-bold" href="/dashboard">POLRESTABES SEMARANG</a>
           </div>

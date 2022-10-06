@@ -71,7 +71,7 @@ crossorigin="anonymous"
           <div id="wrap-chart">
               <canvas class="w-100" id="ikm-mei-chart"></canvas>
           </div>
-          <table class="table table-responsive table-bordered w-100 mt-4">
+          {{-- <table class="table table-responsive table-bordered w-100 mt-4">
               <thead>
                   <tr>
                       <th>Nilai</th>
@@ -86,7 +86,7 @@ crossorigin="anonymous"
                       <td>Sangat Baik</td>
                   </tr>
               </tbody>
-          </table>
+          </table> --}}
       </div>
   </div>
 </div>
