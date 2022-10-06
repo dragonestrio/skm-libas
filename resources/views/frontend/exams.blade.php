@@ -1254,14 +1254,12 @@
   </div>
   <div class="d-flex justify-content-between">
       <div class="btn-prev">
-        <a href="/">
-            <button class="learn-more">
+            <button onclick="previous()" class="learn-more">
                 <span class="circle" aria-hidden="true">
                     <span class="icon arrow"></span>
                 </span>
                 <span class="button-text">Previous</span>
             </button>
-        </a>
     </div>
     {{-- <div>
       <div class="btn-next">
@@ -1278,13 +1276,13 @@
 <script>
   let answers = []
   let question_id = null
-  let currentQuestion = 1
+  let currentPage = 1
   let isLastPage = false
   let data = JSON.parse(localStorage.getItem('data'))
   const listExam = document.querySelector('#Exams')
 
   const getlistExam = () => {
-    fetch((`https://admin.skm.pcctabessmg.xyz/api/questions?page=${currentQuestion}`))
+    fetch((`https://admin.skm.pcctabessmg.xyz/api/questions?page=${currentPage}`))
     .then((response) => {
        return response.json();
     }).then((responseJson) => {
@@ -1309,7 +1307,7 @@
     const getAnswer = value => {
         answers.push({question_id: question_id, answer: value})
         if (!isLastPage) {
-            currentQuestion++
+            currentPage++
             getlistExam()
         } else {
             sendData()
@@ -1329,7 +1327,16 @@
             })
             .then(res => res.json())
             .then(res => window.location.href = '/thanks');
+    }
+
+    const previous = () => {
+        if(currentPage === 1) {
+            window.location.href = '/'
+        }else {
+            currentPage--
+            getlistExam()
         }
+    }
 
     document.addEventListener('DOMContentLoaded', getlistExam);
 
