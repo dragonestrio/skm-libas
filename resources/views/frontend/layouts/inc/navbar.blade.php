@@ -8,8 +8,8 @@
       <nav class="navbar navbar-skm ">
         <div class="container-fluid">
           <div class="logo gap-4">
-            <a class="link-logo" href="/dashboard">
-              <img src="{{ url('media/logo/logo.png') }}" class="" href="{{ url('/') }}" alt="">
+            <a class="link-logo" href="{{ url('/') }}">
+              <img src="{{ url('media/logo/logo.png') }}" class="" alt="">
             </a>
             <a class="link link-light fw-bold" href="{{ url('/') }}">POLRESTABES SEMARANG</a>
           </div>
