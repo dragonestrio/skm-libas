@@ -16,28 +16,10 @@
 {{-- Custom JS --}}
 {{-- <script src="{{ url('assets/js/main.js') }}"></script> --}}
 <script>
-  let unit = null;
-  let date = null;
-
-  function change_unit() {
-    unit = true;
-
-    check_params();
-  }
-
-  function change_date() {
-    date = true;
-
-    check_params();
-  }
-
-  function check_params() {
-    if (unit == true && date == true) {
-      document.getElementById('submit').click();
-    }
+  function clicking_report() {
+    document.getElementById('submit_report').click();
   }
 </script>
-
 <script>
    var win = navigator.platform.indexOf('Win') > -1;
    if (win && document.querySelector('#sidenav-scrollbar')) {

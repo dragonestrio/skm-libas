@@ -24,7 +24,7 @@
                         <div id="flush-one" class="accordion-collapse collapse">
                             <form action="" method="get">
                                 <div class="d-flex">
-                                    <select name="unit" class="form-control text-center justify-content-start" onchange="change_unit()">
+                                    <select name="unit" class="form-control text-center justify-content-start" onchange="clicking_report()">
                                         @if ($unit_current != null)
                                             @foreach ($unit as $item)
                                                 @if ($item->id == $unit_current)
@@ -36,9 +36,9 @@
                                         <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
                                         @endforeach
                                     </select>
-                                    <input type="month" name="date" class="form-control justify-content-end" onchange="change_date()" 
+                                    <input type="month" name="date" class="form-control justify-content-end" onchange="clicking_report()" 
                                     min="2000-01" value="{{ ($date_current == null) ?'': $date_current }}">
-                                    <input type="submit" id="submit" value="cari" class="d-none">
+                                    <input type="submit" id="submit_report" value="cari" class="d-none">
                                 </div>
                             </form>
                         </div>

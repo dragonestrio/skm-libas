@@ -144,8 +144,6 @@ body {
             let unitId = 1
             let unitText = ''
 
-            console.log(month[currentMonth -1])
-
             $(function () {
               $("#datepicker").datepicker({
                 format: "mm-yyyy",

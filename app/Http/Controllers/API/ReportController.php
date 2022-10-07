@@ -174,7 +174,7 @@ class ReportController extends Controller
         // }
 
         $respondent_id = DB::table('respondents')->orderBy('id', 'desc')->first();
-        $respondent_id = $respondent_id->id + 1;
+        $respondent_id = ($respondent_id == null) ? 0 : $respondent_id->id + 1;
         $answers = $request->input('answers');
 
         $data_respondent = [
